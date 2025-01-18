@@ -35,7 +35,7 @@ export default class RoomService{
 
         const data = await this.readData();
         const newRoom = {
-            id:String(data.rooms.lenght+1),
+            id:String(data.rooms.length + 1),
             ...body
         };
 
