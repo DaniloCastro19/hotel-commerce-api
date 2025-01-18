@@ -21,12 +21,7 @@ app.use(cors({
 
 // Swagger documentation
 app.use('/api-docs', swaggerUi.serve);
-app.get('/api-docs', swaggerUi.setup(swaggerSpec, {
-  swaggerOptions: {
-    url: `http://localhost:${PORT}/api-docs/swagger.json`,
-    persistAuthorization: true
-  }
-}));
+app.get('/api-docs', swaggerUi.setup(swaggerSpec));
 
 app.get('/api-docs/swagger.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');

@@ -8,11 +8,11 @@ const PORT = process.env.PORT || 3000;
 const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
-    title: 'Hotels API',
+    title: 'Booking API',
     version: '1.0.0',
     description: 'API for managing hotels and their rooms',
     contact: {
-      name: 'API Support',
+      name: 'Team 007',
       email: 'support@example.com'
     }
   },
@@ -49,7 +49,7 @@ const swaggerDefinition = {
 
 const options = {
   swaggerDefinition,
-  apis: ['./src/api/controllers/*.js']
+  apis: ['./src/routes/*.js']
 };
 
 export const swaggerSpec = swaggerJSDoc(options); 
