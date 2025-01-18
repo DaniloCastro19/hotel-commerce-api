@@ -1,0 +1,19 @@
+{
+    "users": [
+        {
+            "id": "1",
+            "roles": "admin",
+            "permissions": ["create", "read", "update", "delete"]
+        },
+        {
+            "id": "2",
+            "roles": "users",
+            "permissions": ["read"]
+        },
+        {
+            "id": "3",
+            "roles": "unlogged",
+            "permissions": ["read"]
+        }
+    ]
+}
