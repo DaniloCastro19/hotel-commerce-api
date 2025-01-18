@@ -1,0 +1,24 @@
+{
+  "hotels": [
+    {
+      "id": "1",
+      "name": "Grand Hotel",
+      "location": "Downtown",
+      "rating": 4.5,
+      "rooms": 100,
+      "roomsAvailable" : 90,
+      "roomTypes": ["single", "double", "triple", "suite", "suite-family"],
+      "amenities": ["pool", "spa", "restaurant"]
+    },
+    {
+      "id": "2",
+      "name": "Seaside Resort",
+      "location": "Beach Front",
+      "rating": 4.8,
+      "rooms": 150,
+      "roomsAvailable" : 111,
+      "roomTypes": ["single", "double", "triple", "suite"],
+      "amenities": ["beach access", "pool", "gym"]
+    }
+  ]
+}
