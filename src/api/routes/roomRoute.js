@@ -1,13 +1,11 @@
 import {Router} from "express";
-import { createRoom, getRoom } from "../controllers/roomController.js";
+import { getAllRooms, getRoom, createRoom, updateRoom, deleteRoom } from "../controllers/roomController.js";
 const roomRoutes = Router();
 
-
-roomRoutes.get('/rooms/:id', getRoom);
-roomRoutes.post('/rooms', createRoom);
-// roomRoutes('/')
-// roomRoutes('/')
-// roomRoutes('/')
-
+roomRoutes.get('/', getAllRooms);
+roomRoutes.get('/:id', getRoom);
+roomRoutes.post('/', createRoom);
+roomRoutes.put('/:id', updateRoom);
+roomRoutes.delete('/:id', deleteRoom);
 
 export default roomRoutes;

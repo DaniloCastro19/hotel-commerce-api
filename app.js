@@ -26,7 +26,7 @@ app.use(`/${API_PREFIX}/${API_VERSION}/rooms`, roomRoutes);
 
 app.listen(PORT, () =>{
     displayRoutes(app);
-    console.log("App listening on port" , PORT);
+    console.log(`App listening on http://localhost:${PORT}/${API_PREFIX}/${API_VERSION}` );
 });
 
 export default {app};
