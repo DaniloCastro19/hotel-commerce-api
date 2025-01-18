@@ -1,0 +1,16 @@
+{
+    "rooms": [
+      {
+        "id": "1",
+        "hotelId": "1",
+        "roomNumber": "101",
+        "userId":"1",
+        "roomType": ["simple", "double", "triple", "suite", "suite-family"],
+        "capacity" : "3",
+        "available": true,
+        "amenities": ["pool", "spa", "restaurant"],
+        "pricePerNight": 200
+      }
+    ]
+  }
+  
