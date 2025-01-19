@@ -71,4 +71,48 @@ export default class RoomService{
         return deleteRoom[0]
     }
 
+    async filterRooms(filters) {
+        const data = await this.readData();
+        let filteredRooms = data.rooms;
+
+        if (Object.keys(filters).length === 0) {
+            return [];
+        }
+
+        if (filters.capacity) {
+            filteredRooms = filteredRooms.filter(room => 
+                room.capacity >= parseInt(filters.capacity)
+            );
+        }
+
+        if (filters.roomType) {
+            const normalizeString = (str) => str.toLowerCase().replace(/[-\s]/g, '');
+            const searchType = normalizeString(filters.roomType);
+            
+            filteredRooms = filteredRooms.filter(room => 
+                normalizeString(room.roomType) === searchType
+            );
+        }
+
+        if (filters.nBeds) {
+            filteredRooms = filteredRooms.filter(room => 
+                room.nBeds >= parseInt(filters.nBeds)
+            );
+        }
+
+        if (filters.maxPrice) {
+            filteredRooms = filteredRooms.filter(room => 
+                room.pricePerNight <= parseInt(filters.maxPrice)
+            );
+        }
+
+        if (filters.minPrice) {
+            filteredRooms = filteredRooms.filter(room => 
+                room.pricePerNight >= parseInt(filters.minPrice)
+            );
+        }
+
+        return filteredRooms;
+    }
+
 }
