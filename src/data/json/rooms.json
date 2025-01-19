@@ -1,16 +1,20 @@
-{ 
-    "rooms": [
-        { 
-            "id": "1", 
-            "hotelId": "1", 
-            "roomNumber": "101", 
-            "userId":"1", 
-            "roomType": "simple",
-            "nBeds": 1, 
-            "capacity" : 1, 
-            "available": true, 
-            "amenities": ["pool", "spa", "restaurant"], 
-            "pricePerNight": 200 
-        }
-    ]
+{
+  "rooms": [
+    {
+      "id": "1",
+      "hotelId": "3",
+      "roomNumber": "453",
+      "userId": "1",
+      "roomType": "Suite",
+      "nBeds": 2,
+      "capacity": 4,
+      "available": true,
+      "amenities": [
+        "pool",
+        "spa",
+        "restaurant"
+      ],
+      "pricePerNight": 330
+    }
+  ]
 }
