@@ -9,11 +9,6 @@
       "nBeds": 2,
       "capacity": 4,
       "available": true,
-      "amenities": [
-        "pool",
-        "spa",
-        "restaurant"
-      ],
       "pricePerNight": 330
     }
   ]

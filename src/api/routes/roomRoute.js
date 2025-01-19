@@ -1,5 +1,6 @@
 import {Router} from "express";
 import { getAllRooms, getRoom, createRoom, updateRoom, deleteRoom } from "../controllers/roomController.js";
+import { validateBody } from "../../core/utilities/validations/roomsValidations.js";
 const roomRoutes = Router();
 
 /**
@@ -150,8 +151,14 @@ roomRoutes.get('/:id', getRoom);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Room'
+ *       400:
+ *         description: Invalid input data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
-roomRoutes.post('/', createRoom);
+roomRoutes.post('/', validateBody,createRoom);
 
 /**
  * @swagger
@@ -194,8 +201,15 @@ roomRoutes.post('/', createRoom);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *       400:
+ *         description: Invalid input data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ * 
  */
-roomRoutes.put('/:id', updateRoom);
+roomRoutes.put('/:id', validateBody,updateRoom);
 
 /**
  * @swagger
