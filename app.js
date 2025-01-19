@@ -4,7 +4,7 @@ import * as dotenv from "dotenv"
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './src/config/swagger.js';
 import httpErrorHandler from "./src/core/middlewares/errorHandler.js";
-import hotelsRouter from "./src/routes/hotels.js";
+import hotelsRouter from "./src/api/routes/hotels.js";
 import roomRoutes from "./src/api/routes/roomRoute.js";
 import displayRoutes from "express-routemap";
 
