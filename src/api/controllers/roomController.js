@@ -51,4 +51,21 @@ export const deleteRoom = async (req, res, next) =>{
         next(error);
     }
 }
+
+export const filterRooms = async (req, res, next) => {
+    try {
+        const filters = req.query;
+        
+        if (Object.keys(filters).length === 0) {
+            return res.status(400).json({ 
+                message: "At least one filter is required" 
+            });
+        }
+
+        const rooms = await roomService.filterRooms(filters);
+        return res.status(200).json(rooms);
+    } catch(error) {
+        next(error);
+    }
+}
  

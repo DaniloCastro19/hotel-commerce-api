@@ -1,0 +1,195 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Hotels API",
+    "version": "1.0.0",
+    "description": "API for managing hotels"
+  },
+  "paths": {
+    "/hotels": {
+      "get": {
+        "summary": "Get all hotels",
+        "tags": ["Hotels"],
+        "responses": {
+          "200": {
+            "description": "List of hotels retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Hotel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new hotel",
+        "tags": ["Hotels"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Hotel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Hotel created successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/hotels/{id}": {
+      "get": {
+        "summary": "Get hotel by ID",
+        "tags": ["Hotels"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hotel found successfully"
+          },
+          "404": {
+            "description": "Hotel not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update hotel",
+        "tags": ["Hotels"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Hotel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Hotel updated successfully"
+          },
+          "404": {
+            "description": "Hotel not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete hotel",
+        "tags": ["Hotels"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hotel deleted successfully"
+          },
+          "404": {
+            "description": "Hotel not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Hotel": {
+        "type": "object",
+        "required": [
+          "name",
+          "location",
+          "rooms",
+          "roomsAvailable",
+          "roomTypes"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Hotel ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Hotel name"
+          },
+          "location": {
+            "type": "string",
+            "description": "Hotel location"
+          },
+          "rating": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 5,
+            "description": "Hotel rating"
+          },
+          "rooms": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Total number of rooms"
+          },
+          "roomsAvailable": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of available rooms"
+          },
+          "roomTypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["single", "double", "triple", "suite", "suite-family"]
+            },
+            "description": "Available room types"
+          },
+          "amenities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Hotel amenities"
+          },
+          "averagePricePerNight": {
+            "type": "number",
+            "description": "Average price per night"
+          }
+        }
+      }
+    }
+  }
+}

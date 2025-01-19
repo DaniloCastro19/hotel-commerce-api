@@ -1,0 +1,258 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Hotel Rooms API",
+    "version": "1.0.0",
+    "description": "API for managing hotel rooms"
+  },
+  "paths": {
+    "/rooms": {
+      "get": {
+        "summary": "Get all rooms",
+        "tags": ["Rooms"],
+        "responses": {
+          "200": {
+            "description": "List of rooms retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Room"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new room",
+        "tags": ["Rooms"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Room"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Room created successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/rooms/search": {
+      "get": {
+        "summary": "Search rooms by filters",
+        "tags": ["Rooms"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "capacity",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Minimum capacity required"
+          },
+          {
+            "in": "query",
+            "name": "roomType",
+            "schema": {
+              "type": "string",
+              "enum": ["single", "double", "triple", "suite", "suite-family"]
+            },
+            "description": "Type of room"
+          },
+          {
+            "in": "query",
+            "name": "nBeds",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Minimum number of beds"
+          },
+          {
+            "in": "query",
+            "name": "minPrice",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Minimum price per night"
+          },
+          {
+            "in": "query",
+            "name": "maxPrice",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Maximum price per night"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Filtered list of rooms",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Room"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No filters provided"
+          }
+        }
+      }
+    },
+    "/rooms/{id}": {
+      "get": {
+        "summary": "Get room by ID",
+        "tags": ["Rooms"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Room found successfully"
+          },
+          "404": {
+            "description": "Room not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update room",
+        "tags": ["Rooms"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Room"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Room updated successfully"
+          },
+          "404": {
+            "description": "Room not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete room",
+        "tags": ["Rooms"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Room deleted successfully"
+          },
+          "404": {
+            "description": "Room not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Room": {
+        "type": "object",
+        "required": [
+          "hotelId",
+          "roomNumber",
+          "userId",
+          "roomType",
+          "capacity",
+          "nBeds",
+          "available",
+          "pricePerNight"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Room ID"
+          },
+          "hotelId": {
+            "type": "string",
+            "description": "Hotel ID"
+          },
+          "roomNumber": {
+            "type": "string",
+            "description": "Room number"
+          },
+          "userId": {
+            "type": "string",
+            "description": "User ID"
+          },
+          "roomType": {
+            "type": "string",
+            "enum": ["single", "double", "triple", "suite", "suite-family"],
+            "description": "Type of room"
+          },
+          "capacity": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4,
+            "description": "Room capacity"
+          },
+          "nBeds": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3,
+            "description": "Number of beds"
+          },
+          "available": {
+            "type": "boolean",
+            "description": "Room availability"
+          },
+          "pricePerNight": {
+            "type": "number",
+            "description": "Price per night"
+          }
+        }
+      }
+    }
+  }
+}

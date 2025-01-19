@@ -3,13 +3,57 @@
     {
       "id": "1",
       "hotelId": "3",
-      "roomNumber": "453",
+      "roomNumber": "111",
       "userId": "1",
-      "roomType": "Suite",
+      "roomType": "single",
+      "nBeds": 1,
+      "capacity": 2,
+      "available": true,
+      "pricePerNight": 100
+    },
+    {
+      "id": "2",
+      "hotelId": "3",
+      "roomNumber": "222",
+      "userId": "2",
+      "roomType": "double",
       "nBeds": 2,
       "capacity": 4,
       "available": true,
-      "pricePerNight": 330
+      "pricePerNight": 200
+    },
+    {
+      "id": "3",
+      "hotelId": "3",
+      "roomNumber": "333",
+      "userId": "3",
+      "roomType": "triple",
+      "nBeds": 3,
+      "capacity": 3,
+      "available": true,
+      "pricePerNight": 300
+    },
+    {
+      "id": "4",
+      "hotelId": "3",
+      "roomNumber": "444",
+      "userId": "4",
+      "roomType": "suite",
+      "nBeds": 1,
+      "capacity": 2,
+      "available": true,
+      "pricePerNight": 400
+    },
+    {
+      "id": "5",
+      "hotelId": "3",
+      "roomNumber": "555",
+      "userId": "5",
+      "roomType": "suite-family",
+      "nBeds": 1,
+      "capacity": 3,
+      "available": true,
+      "pricePerNight": 500
     }
   ]
 }
