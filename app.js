@@ -18,11 +18,28 @@ const API_VERSION = "v1"
 
 //Middlewares
 app.use(express.json())
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));
+  
+// Swagger documentation
+app.use('/api-docs', swaggerUi.serve);
+app.get('/api-docs', swaggerUi.setup(swaggerSpec));
+
+app.get('/api-docs/swagger.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
+
+app.use('/hotels', hotelsRouter);
+
 app.use(httpErrorHandler);
 
 //Routes
 app.use(`/${API_PREFIX}/${API_VERSION}/rooms`, roomRoutes); 
+app.use(`/${API_PREFIX}/${API_VERSION}/hotels`, hotelsRouter);
 
 app.listen(PORT, () =>{
     displayRoutes(app);
