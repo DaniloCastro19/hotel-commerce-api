@@ -56,7 +56,6 @@ export const filterRooms = async (req, res, next) => {
     try {
         const filters = req.query;
         
-        // Verificar que al menos hay un filtro
         if (Object.keys(filters).length === 0) {
             return res.status(400).json({ 
                 message: "At least one filter is required" 
