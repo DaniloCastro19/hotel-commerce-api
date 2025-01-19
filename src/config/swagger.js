@@ -4,6 +4,8 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
+const API_PREFIX = "api"
+const API_VERSION = "v1"
 
 const swaggerDefinition = {
   openapi: '3.0.0',
@@ -18,7 +20,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: `http://localhost:${PORT}`,
+      url: `http://localhost:${PORT}/${API_PREFIX}/${API_VERSION}`,
       description: 'Development server'
     }
   ],
@@ -49,7 +51,7 @@ const swaggerDefinition = {
 
 const options = {
   swaggerDefinition,
-  apis: ['./src/routes/*.js']
+  apis: ['./src/api/routes/*.js']
 };
 
 export const swaggerSpec = swaggerJSDoc(options); 

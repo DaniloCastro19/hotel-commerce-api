@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { HotelsController } from '../api/controllers/hotelsController.js';
+import { HotelsController } from '../controllers/hotelsController.js';
 
 const router = Router();
 

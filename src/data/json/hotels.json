@@ -6,19 +6,37 @@
       "location": "Downtown",
       "rating": 4.5,
       "rooms": 100,
-      "roomsAvailable" : 90,
-      "roomTypes": ["single", "double", "triple", "suite", "suite-family"],
-      "amenities": ["pool", "spa", "restaurant"]
+      "roomsAvailable": 90,
+      "roomTypes": [
+        "single",
+        "double",
+        "triple",
+        "suite",
+        "suite-family"
+      ],
+      "amenities": [
+        "pool",
+        "spa",
+        "restaurant"
+      ],
+      "averagePricePerNight": 200
     },
     {
-      "id": "2",
-      "name": "Seaside Resort",
+      "id": "1737253008819",
+      "name": "Not ne",
       "location": "Beach Front",
-      "rating": 4.8,
-      "rooms": 150,
-      "roomsAvailable" : 111,
-      "roomTypes": ["single", "double", "triple", "suite"],
-      "amenities": ["beach access", "pool", "gym"]
+      "rating": 4.5,
+      "rooms": 120,
+      "roomsAvailable": 100,
+      "roomTypes": [
+        "single",
+        "double",
+        "suite"
+      ],
+      "amenities": [
+        "pool",
+        "beach access"
+      ]
     }
   ]
 }
