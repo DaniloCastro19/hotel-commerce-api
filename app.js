@@ -4,21 +4,26 @@ import * as dotenv from "dotenv"
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './src/config/swagger.js';
 import httpErrorHandler from "./src/core/middlewares/errorHandler.js";
-import hotelsRouter from "./src/routes/hotels.js";
+import hotelsRouter from "./src/api/routes/hotels.js";
+import roomRoutes from "./src/api/routes/roomRoute.js";
+import displayRoutes from "express-routemap";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
+const API_PREFIX = "api"
+const API_VERSION = "v1"
 
-// Middlewares
-app.use(express.json());
+
+//Middlewares
+app.use(express.json())
 app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));
+  
 // Swagger documentation
 app.use('/api-docs', swaggerUi.serve);
 app.get('/api-docs', swaggerUi.setup(swaggerSpec));
@@ -32,6 +37,13 @@ app.use('/hotels', hotelsRouter);
 
 app.use(httpErrorHandler);
 
-app.listen(PORT, () => {
-    console.log("App listening on port", PORT);
+//Routes
+app.use(`/${API_PREFIX}/${API_VERSION}/rooms`, roomRoutes); 
+app.use(`/${API_PREFIX}/${API_VERSION}/hotels`, hotelsRouter);
+
+app.listen(PORT, () =>{
+    displayRoutes(app);
+    console.log(`App listening on http://localhost:${PORT}/${API_PREFIX}/${API_VERSION}` );
 });
+
+export default {app};
