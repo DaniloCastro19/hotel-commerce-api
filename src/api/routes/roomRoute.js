@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { getAllRooms, getRoom, createRoom, updateRoom, deleteRoom } from "../controllers/roomController.js";
+import { getAllRooms, getRoom, createRoom, updateRoom, deleteRoom, filterRooms } from "../controllers/roomController.js";
 import { validateBody } from "../../core/utilities/validations/roomsValidations.js";
 const roomRoutes = Router();
 
@@ -92,6 +92,56 @@ const roomRoutes = Router();
  *               $ref: '#/components/schemas/Error'
  */
 roomRoutes.get('/', getAllRooms);
+
+/**
+ * @swagger
+ * /rooms/search:
+ *   get:
+ *     summary: Search rooms by filters
+ *     tags: [Rooms]
+ *     parameters:
+ *       - in: query
+ *         name: capacity
+ *         schema:
+ *           type: integer
+ *         description: Minimum capacity required
+ *       - in: query
+ *         name: roomType
+ *         schema:
+ *           type: string
+ *         description: Type of room (single, double, triple, suite, suite-family)
+ *       - in: query
+ *         name: nBeds
+ *         schema:
+ *           type: integer
+ *         description: Minimum number of beds required
+ *       - in: query
+ *         name: minPrice
+ *         schema:
+ *           type: integer
+ *         description: Minimum price per night
+ *       - in: query
+ *         name: maxPrice
+ *         schema:
+ *           type: integer
+ *         description: Maximum price per night
+ *     responses:
+ *       200:
+ *         description: List of filtered rooms
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Room'
+ *       400:
+ *         description: No filters provided
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+roomRoutes.get('/search', filterRooms);
 
 /**
  * @swagger
