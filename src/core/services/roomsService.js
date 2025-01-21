@@ -1,4 +1,4 @@
-import Room from "../../api/models/roomModel.js";
+import Room from "../models/roomModel.js";
 import fs from "fs";
 import path from "path";
 
