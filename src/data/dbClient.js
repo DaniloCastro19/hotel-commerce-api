@@ -11,6 +11,7 @@ import mongoose from 'mongoose';
     async connect(){
         try{
             const queryString = process.env.CONNECTION_STRING;
+            
             await mongoose.connect(queryString);
             this.client = new MongoClient(queryString);
             console.log('Successfull connection with database.');            

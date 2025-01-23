@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import * as dotenv from "dotenv"
 import swaggerUi from 'swagger-ui-express';
+import dbClient from "./src/data/dbClient.js";
 import { swaggerSpec } from './src/config/swagger.js';
 import httpErrorHandler from "./src/core/middlewares/errorHandler.js";
 import hotelsRouter from "./src/api/routes/hotels.js";
@@ -44,6 +45,12 @@ app.use(`/${API_PREFIX}/${API_VERSION}/hotels`, hotelsRouter);
 app.listen(PORT, () =>{
     displayRoutes(app);
     console.log(`App listening on http://localhost:${PORT}/${API_PREFIX}/${API_VERSION}` );
+});
+
+
+process.on('SIGINT', async ()=>{
+  dbClient.closeConnection();
+  process.exit(0);
 });
 
 export default {app};
