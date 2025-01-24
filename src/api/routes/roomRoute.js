@@ -21,21 +21,21 @@ const roomRoutes = Router();
  * 
  *       properties:
  *         id:
- *           type: string
+ *           type: ObjectId
  *           description: Auto-generated hotel ID
- *           example: "1"
+ *           example: "6791b530d1a99c3c3c34c1b5"
  *         hotelId:
- *           type: string
+ *           type: ObjectId
  *           description: ID of the hotel wich rooms belongs  
- *           example: "1"
+ *           example: "6791b530d1a99c3c3f34c1b5"
  *         roomNumber:
  *           type: string
  *           description: Room number in hotel
  *           example: "505"
  *         userId:
- *           type: string
+ *           type: ObjectId
  *           description: ID user owner of the room
- *           example: "1"
+ *           example: "6791b530d1a99c3c3c34c1b3"
  *         roomType:
  *           type: string
  *           description: Type of room choosed ([single, double, triple, suite, suite-family])
@@ -154,9 +154,9 @@ roomRoutes.get('/search', filterRooms);
  *         name: id
  *         required: true
  *         schema:
- *           type: string
+ *           type: ObjectId
  *         description: Room ID
- *         example: "1"
+ *         example: "6791b530d1a99c3c3c34c1b1"
  *     responses:
  *       200:
  *         description: Room found successfully
@@ -186,9 +186,9 @@ roomRoutes.get('/:id', getRoom);
  *           schema:
  *             $ref: '#/components/schemas/Room'
  *           example:
- *             hotelId: "1"
+ *             hotelId: "6711b530d1a99c3c3c34c1b5"
  *             roomNumber: "505"
- *             userId: "1"
+ *             userId: "6791b530d1a99c3c3c34c1f4"
  *             roomType: "Single"
  *             capacity: 1
  *             nBeds: 1
@@ -221,7 +221,7 @@ roomRoutes.post('/', validateBody,createRoom);
  *         name: id
  *         required: true
  *         schema:
- *           type: string
+ *           type: ObjectId
  *         description: Room ID
  *     requestBody:
  *       required: true
@@ -230,9 +230,9 @@ roomRoutes.post('/', validateBody,createRoom);
  *           schema:
  *             $ref: '#/components/schemas/Room'
  *           example:
- *             hotelId: "1"
+ *             hotelId: "6791b530d1a99c3c3c34c1f3"
  *             roomNumber: "200"
- *             userId: "1"
+ *             userId: "6791b530d1a99c3c3c34c1k5"
  *             roomType: "Suite"
  *             capacity: 4
  *             nBeds: 2
@@ -272,7 +272,7 @@ roomRoutes.put('/:id', validateBody,updateRoom);
  *         name: id
  *         required: true
  *         schema:
- *           type: string
+ *           type: ObjectId
  *         description: Room ID
  *     responses:
  *       200:
