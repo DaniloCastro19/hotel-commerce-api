@@ -49,15 +49,10 @@ export default class RoomService{
     }
 
     async filterRooms(filters) {
-        const data = await this.readData();
-        let filteredRooms = data.rooms;
-
-        if (Object.keys(filters).length === 0) {
-            return [];
-        }
+        let rooms = await getAll();
 
         if (filters.capacity) {
-            filteredRooms = filteredRooms.filter(room => 
+            rooms = rooms.filter(room => 
                 room.capacity >= parseInt(filters.capacity)
             );
         }
@@ -66,30 +61,30 @@ export default class RoomService{
             const normalizeString = (str) => str.toLowerCase().replace(/[-\s]/g, '');
             const searchType = normalizeString(filters.roomType);
             
-            filteredRooms = filteredRooms.filter(room => 
+            rooms = rooms.filter(room => 
                 normalizeString(room.roomType) === searchType
             );
         }
 
         if (filters.nBeds) {
-            filteredRooms = filteredRooms.filter(room => 
+            rooms = rooms.filter(room => 
                 room.nBeds >= parseInt(filters.nBeds)
             );
         }
 
         if (filters.maxPrice) {
-            filteredRooms = filteredRooms.filter(room => 
+            rooms = rooms.filter(room => 
                 room.pricePerNight <= parseInt(filters.maxPrice)
             );
         }
 
         if (filters.minPrice) {
-            filteredRooms = filteredRooms.filter(room => 
+            rooms = rooms.filter(room => 
                 room.pricePerNight >= parseInt(filters.minPrice)
             );
         }
 
-        return filteredRooms;
+        return rooms;
     }
 
 }
