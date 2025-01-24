@@ -17,9 +17,9 @@ const router = Router();
  *         - roomTypes
  *       properties:
  *         id:
- *           type: string
+ *           type: ObjectId
  *           description: Auto-generated hotel ID
- *           example: "1"
+ *           example: 679306bb8d6e09575152eb21
  *         name:
  *           type: string
  *           description: Hotel name
@@ -102,9 +102,9 @@ router.get('/', HotelsController.getAllHotels);
  *         name: id
  *         required: true
  *         schema:
- *           type: string
+ *           type: ObjectId
  *         description: Hotel ID
- *         example: "1"
+ *         example: 679306bb8d6e09575152eb21
  *     responses:
  *       200:
  *         description: Hotel found successfully
@@ -168,7 +168,7 @@ router.post('/', HotelsController.createHotel);
  *         name: id
  *         required: true
  *         schema:
- *           type: string
+ *           type: ObjectId
  *         description: Hotel ID
  *     requestBody:
  *       required: true
@@ -207,7 +207,7 @@ router.put('/:id', HotelsController.updateHotel);
  *         name: id
  *         required: true
  *         schema:
- *           type: string
+ *           type: ObjectId
  *         description: Hotel ID
  *     responses:
  *       200:

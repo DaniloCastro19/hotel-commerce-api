@@ -1,11 +1,12 @@
 import { ENTITY_NOT_FOUND } from '../../core/utilities/customErrors.js';
 import { HotelServices } from '../../core/services/hotelsServices.js';
 
+const hotelService = new HotelServices();
 export class HotelsController {
   static async getAllHotels(req, res, next) {
     try {
-      const hotels = await HotelServices.getAllHotels();
-      res.json(hotels);
+      const hotels = await hotelService.getAllHotels();
+      res.status(200).json(hotels);
     } catch (error) {
       next(error);
     }
@@ -13,11 +14,11 @@ export class HotelsController {
 
   static async getHotelById(req, res, next) {
     try {
-      const hotel = await HotelServices.getHotelById(req.params.id);
+      const hotel = await hotelService.getHotelById(req.params.id);
       if (!hotel) {
-        return next(ENTITY_NOT_FOUND('Hotel'));
+        throw ENTITY_NOT_FOUND('Hotel')
       }
-      res.json(hotel);
+      return res.status(200).json(hotel);
     } catch (error) {
       next(error);
     }
@@ -25,7 +26,7 @@ export class HotelsController {
 
   static async createHotel(req, res, next) {
     try {
-      const newHotel = await HotelServices.createHotel(req.body);
+      const newHotel = await hotelService.createHotel(req.body);
       res.status(201).json(newHotel);
     } catch (error) {
       next(error);
@@ -34,11 +35,12 @@ export class HotelsController {
 
   static async updateHotel(req, res, next) {
     try {
-      const updatedHotel = await HotelServices.updateHotel(req.params.id, req.body);
+      const updatedHotel = await hotelService.updateHotel(req.params.id, req.body);
       if (!updatedHotel) {
-        return next(ENTITY_NOT_FOUND('Hotel'));
+        throw ENTITY_NOT_FOUND('Hotel');
       }
-      res.json(updatedHotel);
+      return res.status(200).json(updatedHotel);
+
     } catch (error) {
       next(error);
     }
@@ -46,11 +48,11 @@ export class HotelsController {
 
   static async deleteHotel(req, res, next) {
     try {
-      const deleted = await HotelServices.deleteHotel(req.params.id);
+      const deleted = await hotelService.deleteHotel(req.params.id);
       if (!deleted) {
-        return next(ENTITY_NOT_FOUND('Hotel'));
+        throw ENTITY_NOT_FOUND('Hotel');
       }
-      res.json({ message: 'Hotel deleted successfully' });
+      return res.json({ message: 'Hotel deleted successfully' });
     } catch (error) {
       next(error);
     }
