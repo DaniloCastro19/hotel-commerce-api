@@ -1,6 +1,7 @@
-import Room from "../../api/models/roomModel.js";
 import fs from "fs";
 import path from "path";
+
+import { getAll, create, getById, update, findAndDelete, isIdExisting} from "../../data/roomsRepositorie.js";
 
 const filePath = path.resolve("./src/data/json/rooms.json");
 
@@ -8,79 +9,50 @@ export default class RoomService{
     constructor(){
     }
 
-    async readData (){
-        const data = await fs.promises.readFile(filePath, "utf8");
-        return JSON.parse(data);
-    }
-
-
-    async writeData(data){
-        await fs.promises.writeFile(filePath, JSON.stringify(data,null,2))
-    }
-
-
     async getAllRooms(){
-        const data = await this.readData();
-        return data.rooms;
+        const rooms = await getAll();
+        return rooms;
     }
 
 
     async getRoom(id){
-        const data = await this.readData();
-        return data.rooms.find(room => room.id ===id);
+        const room = await getById(id);
+        if (!room){
+            return null
+        }
+        return room
     }
 
 
     async createRoom (body) {
-
-        const data = await this.readData();
-        const newRoom = {
-            id:String(data.rooms.length + 1),
-            ...body
-        };
-
-        data.rooms.push(newRoom);
-
-        await this.writeData(data);
-
+        const newRoom = await create(body);
         return newRoom;
-
     }
 
     async updateRoom(id, body){
-        const data = await this.readData();
-        const roomIndex = data.rooms.findIndex(room => room.id ===id);
-        if(roomIndex === -1){
-            return null;
+        const roomExist = await isIdExisting(id);
+        if (!roomExist){
+            return null
         }
-        data.rooms[roomIndex] = {...data.rooms[roomIndex], ...body};
-        await this.writeData(data);
-        return data.rooms[roomIndex];
+        const updatedRoom = await update(id,body);
+        return updatedRoom;
     }
 
 
     async deleteRoom(id){
-        const data = await this.readData();
-        const roomIndex = data.rooms.findIndex(room => room.id ===id);
-        if(roomIndex === -1){
-            return null;
+        const roomExist = await isIdExisting(id);
+        if (!roomExist){
+            return null
         }
-
-        const deleteRoom = data.rooms.splice(roomIndex,1);
-        await this.writeData(data);
-        return deleteRoom[0]
+        const room = await findAndDelete(id);
+        return room
     }
 
     async filterRooms(filters) {
-        const data = await this.readData();
-        let filteredRooms = data.rooms;
-
-        if (Object.keys(filters).length === 0) {
-            return [];
-        }
+        let rooms = await getAll();
 
         if (filters.capacity) {
-            filteredRooms = filteredRooms.filter(room => 
+            rooms = rooms.filter(room => 
                 room.capacity >= parseInt(filters.capacity)
             );
         }
@@ -89,30 +61,30 @@ export default class RoomService{
             const normalizeString = (str) => str.toLowerCase().replace(/[-\s]/g, '');
             const searchType = normalizeString(filters.roomType);
             
-            filteredRooms = filteredRooms.filter(room => 
+            rooms = rooms.filter(room => 
                 normalizeString(room.roomType) === searchType
             );
         }
 
         if (filters.nBeds) {
-            filteredRooms = filteredRooms.filter(room => 
+            rooms = rooms.filter(room => 
                 room.nBeds >= parseInt(filters.nBeds)
             );
         }
 
         if (filters.maxPrice) {
-            filteredRooms = filteredRooms.filter(room => 
+            rooms = rooms.filter(room => 
                 room.pricePerNight <= parseInt(filters.maxPrice)
             );
         }
 
         if (filters.minPrice) {
-            filteredRooms = filteredRooms.filter(room => 
+            rooms = rooms.filter(room => 
                 room.pricePerNight >= parseInt(filters.minPrice)
             );
         }
 
-        return filteredRooms;
+        return rooms;
     }
 
 }
