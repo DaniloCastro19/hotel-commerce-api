@@ -1,4 +1,4 @@
-import Room from "../core/models/roomModel.js";
+import Room from "../../core/models/roomModel.js";
 
 
     export const isIdExisting = async (id) =>{
