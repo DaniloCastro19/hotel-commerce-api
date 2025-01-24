@@ -1,9 +1,4 @@
-import fs from "fs";
-import path from "path";
-
-import { getAll, create, getById, update, findAndDelete, isIdExisting} from "../../data/roomsRepositorie.js";
-
-const filePath = path.resolve("./src/data/json/rooms.json");
+import { getAll, create, getById, update, findAndDelete, isIdExisting} from "../../data/repositories/roomsRepository.js";
 
 export default class RoomService{
     constructor(){
