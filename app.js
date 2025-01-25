@@ -8,6 +8,9 @@ import httpErrorHandler from "./src/core/middlewares/errorHandler.js";
 import hotelsRouter from "./src/api/routes/hotels.js";
 import roomRoutes from "./src/api/routes/roomRoute.js";
 import displayRoutes from "express-routemap";
+import session from 'express-session';
+import keycloak from './src/config/keycloak.js';
+import userRoutes from './src/api/routes/userRoutes.js';
 
 dotenv.config();
 
@@ -41,6 +44,18 @@ app.use(httpErrorHandler);
 //Routes
 app.use(`/${API_PREFIX}/${API_VERSION}/rooms`, roomRoutes); 
 app.use(`/${API_PREFIX}/${API_VERSION}/hotels`, hotelsRouter);
+app.use('/api/users', userRoutes);
+
+// Configuración de sesión
+app.use(session({
+    secret: 'tu_secreto_aqui',
+    resave: false,
+    saveUninitialized: true,
+    store: keycloak.memoryStore
+}));
+
+// Inicializar Keycloak
+app.use(keycloak.middleware());
 
 app.listen(PORT, () =>{
     displayRoutes(app);
