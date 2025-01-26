@@ -44,7 +44,7 @@ app.use(httpErrorHandler);
 //Routes
 app.use(`/${API_PREFIX}/${API_VERSION}/rooms`, roomRoutes); 
 app.use(`/${API_PREFIX}/${API_VERSION}/hotels`, hotelsRouter);
-app.use('/api/users', userRoutes);
+app.use(`/${API_PREFIX}/${API_VERSION}/users`, userRoutes);
 
 // Configuración de sesión
 app.use(session({
