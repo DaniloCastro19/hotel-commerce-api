@@ -12,8 +12,8 @@ export const validateBody = [
     check("rating").notEmpty().withMessage("rating cannot be empty"),
     check("rating").isNumeric().withMessage("rating must be Numeric"),
 
-    check("rooms").notEmpty().withMessage("rooms cannot be empty"),
-    check("rooms").isInt().withMessage("rooms must be an Numeric"),
+    check("totalRooms").notEmpty().withMessage("totalRooms cannot be empty"),
+    check("totalRooms").isInt().withMessage("totalRooms must be an Numeric"),
     
     check("roomsAvailable").notEmpty().withMessage("roomsAvailable cannot be empty"),
     check("roomsAvailable").isInt().withMessage("roomsAvailable must be an integer"),

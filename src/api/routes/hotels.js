@@ -13,7 +13,7 @@ const router = Router();
  *       required:
  *         - name
  *         - location
- *         - rooms
+ *         - totalRooms
  *         - roomsAvailable
  *         - roomTypes
  *       properties:
@@ -36,7 +36,7 @@ const router = Router();
  *           maximum: 5
  *           description: Hotel rating (0-5)
  *           example: 4.5
- *         rooms:
+ *         totalRooms:
  *           type: integer
  *           minimum: 1
  *           description: Total number of rooms
@@ -138,7 +138,7 @@ router.get('/:id', HotelsController.getHotelById);
  *             name: "New Hotel"
  *             location: "Beach Front"
  *             rating: 4.5
- *             rooms: 120
+ *             totalRooms: 120
  *             roomsAvailable: 100
  *             roomTypes: ["single", "double", "suite"]
  *             amenities: ["pool", "beach access"]
