@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register, getAllUsers, getUser, updateUser, deleteUser } from "../controllers/usersControllers.js";
+import { register, getAllUsers, getUser, updateUser, deleteUser,login } from "../controllers/usersControllers.js";
 import { validateAuth, requireRoles } from "../../core/middlewares/authMiddleware.js";
 import { validateRegister, validateUpdate, validateId } from "../../core/utilities/validations/userValidations.js";
 
