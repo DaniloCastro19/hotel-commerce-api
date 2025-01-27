@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { HotelsController } from '../controllers/hotelsController.js';
+import { validateBody } from '../../core/utilities/validations/hotelsValidations.js';
+import { verifyToken, isAdmin } from '../../core/middlewares/authMiddleware.js';
 
 const router = Router();
 
@@ -12,7 +14,7 @@ const router = Router();
  *       required:
  *         - name
  *         - location
- *         - rooms
+ *         - totalRooms
  *         - roomsAvailable
  *         - roomTypes
  *       properties:
@@ -35,7 +37,7 @@ const router = Router();
  *           maximum: 5
  *           description: Hotel rating (0-5)
  *           example: 4.5
- *         rooms:
+ *         totalRooms:
  *           type: integer
  *           minimum: 1
  *           description: Total number of rooms
@@ -137,7 +139,7 @@ router.get('/:id', HotelsController.getHotelById);
  *             name: "New Hotel"
  *             location: "Beach Front"
  *             rating: 4.5
- *             rooms: 120
+ *             totalRooms: 120
  *             roomsAvailable: 100
  *             roomTypes: ["single", "double", "suite"]
  *             amenities: ["pool", "beach access"]
@@ -155,7 +157,7 @@ router.get('/:id', HotelsController.getHotelById);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/', HotelsController.createHotel);
+router.post('/', verifyToken, isAdmin, validateBody, HotelsController.createHotel);
 
 /**
  * @swagger
@@ -194,7 +196,7 @@ router.post('/', HotelsController.createHotel);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/:id', HotelsController.updateHotel);
+router.put('/:id', verifyToken, isAdmin, validateBody, HotelsController.updateHotel);
 
 /**
  * @swagger
@@ -227,6 +229,6 @@ router.put('/:id', HotelsController.updateHotel);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/:id', HotelsController.deleteHotel);
+router.delete('/:id', verifyToken, isAdmin, HotelsController.deleteHotel);
 
 export default router;

@@ -15,7 +15,7 @@ const hotelModel = new mongoose.Schema(
             type: Number,
             require: true
         },
-        rooms:{
+        totalRooms:{
             type: Number,
             require: true
         },

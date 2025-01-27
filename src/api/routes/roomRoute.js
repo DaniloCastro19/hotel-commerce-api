@@ -1,6 +1,7 @@
 import {Router} from "express";
 import { getAllRooms, getRoom, createRoom, updateRoom, deleteRoom, filterRooms } from "../controllers/roomController.js";
 import { validateBody } from "../../core/utilities/validations/roomsValidations.js";
+import { verifyToken, isAdmin } from '../../core/middlewares/authMiddleware.js';
 const roomRoutes = Router();
 
 /**
@@ -208,7 +209,7 @@ roomRoutes.get('/:id', getRoom);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-roomRoutes.post('/', validateBody,createRoom);
+roomRoutes.post('/', verifyToken, isAdmin, validateBody, createRoom);
 
 /**
  * @swagger
@@ -259,7 +260,7 @@ roomRoutes.post('/', validateBody,createRoom);
  *               $ref: '#/components/schemas/Error'
  * 
  */
-roomRoutes.put('/:id', validateBody,updateRoom);
+roomRoutes.put('/:id', verifyToken, isAdmin, validateBody, updateRoom);
 
 /**
  * @swagger
@@ -292,6 +293,6 @@ roomRoutes.put('/:id', validateBody,updateRoom);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-roomRoutes.delete('/:id', deleteRoom);
+roomRoutes.delete('/:id', verifyToken, isAdmin, deleteRoom);
 
 export default roomRoutes;
