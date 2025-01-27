@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { HotelsController } from '../controllers/hotelsController.js';
 import { validateBody } from '../../core/utilities/validations/hotelsValidations.js';
+import { verifyToken, isAdmin } from '../../core/middlewares/authMiddleware.js';
 
 const router = Router();
 
@@ -156,7 +157,7 @@ router.get('/:id', HotelsController.getHotelById);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/', validateBody, HotelsController.createHotel);
+router.post('/', verifyToken, isAdmin, validateBody, HotelsController.createHotel);
 
 /**
  * @swagger
@@ -195,7 +196,7 @@ router.post('/', validateBody, HotelsController.createHotel);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/:id', validateBody,HotelsController.updateHotel);
+router.put('/:id', verifyToken, isAdmin, validateBody, HotelsController.updateHotel);
 
 /**
  * @swagger
@@ -228,6 +229,6 @@ router.put('/:id', validateBody,HotelsController.updateHotel);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/:id', HotelsController.deleteHotel);
+router.delete('/:id', verifyToken, isAdmin, HotelsController.deleteHotel);
 
 export default router;

@@ -9,6 +9,7 @@ import hotelsRouter from "./src/api/routes/hotels.js";
 import roomRoutes from "./src/api/routes/roomRoute.js";
 import userRoutes from './src/api/routes/userRoutes.js';
 import displayRoutes from "express-routemap";
+import session from 'express-session';
 
 dotenv.config();
 
@@ -16,7 +17,6 @@ const app = express();
 const PORT = process.env.PORT;
 const API_PREFIX = "api"
 
-//Middlewares
 app.use(express.json())
 app.use(cors({
     origin: '*',
@@ -24,7 +24,6 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
   
-// Swagger documentation
 app.use('/api-docs', swaggerUi.serve);
 app.get('/api-docs', swaggerUi.setup(swaggerSpec));
 
@@ -33,17 +32,20 @@ app.get('/api-docs/swagger.json', (req, res) => {
     res.send(swaggerSpec);
 });
 
+app.use(session({
+    secret: 'tu_secreto_aqui',
+    resave: false,
+    saveUninitialized: true,
+}));
+
 app.use(httpErrorHandler);
 
-// Crear un router para agrupar todas las rutas API
 const apiRouter = express.Router();
 
-//Routes
 apiRouter.use('/users', userRoutes);
 apiRouter.use('/rooms', roomRoutes);
 apiRouter.use('/hotels', hotelsRouter);
 
-// Montar todas las rutas API bajo el prefijo /api
 app.use(`/${API_PREFIX}`, apiRouter);
 
 app.listen(PORT, () =>{

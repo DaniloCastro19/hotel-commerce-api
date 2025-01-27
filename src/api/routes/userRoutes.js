@@ -1,6 +1,7 @@
 import express from 'express';
 import UsersController from '../controllers/usersControllers.js';
 import { validateRegister, validateLogin, validateUpdate, validateId } from '../../core/utilities/validations/userValidations.js';
+import { verifyToken, isAdmin } from '../../core/middlewares/authMiddleware.js';
 
 const router = express.Router();
 
@@ -100,7 +101,7 @@ router.post('/login', validateLogin, UsersController.login);
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-router.get('/', UsersController.getAllUsers);
+router.get('/', verifyToken, UsersController.getAllUsers);
 
 /**
  * @swagger
@@ -120,7 +121,7 @@ router.get('/', UsersController.getAllUsers);
  *       404:
  *         description: User not found
  */
-router.get('/:id', validateId, UsersController.getUserById);
+router.get('/:id', verifyToken, validateId, UsersController.getUserById);
 
 /**
  * @swagger
@@ -161,7 +162,7 @@ router.get('/:id', validateId, UsersController.getUserById);
  *       404:
  *         description: User not found
  */
-router.put('/:id', validateUpdate, UsersController.updateUser);
+router.put('/:id', verifyToken, isAdmin, validateUpdate, UsersController.updateUser);
 
 /**
  * @swagger
@@ -181,6 +182,6 @@ router.put('/:id', validateUpdate, UsersController.updateUser);
  *       404:
  *         description: User not found
  */
-router.delete('/:id', validateId, UsersController.deleteUser);
+router.delete('/:id', verifyToken, isAdmin, validateId, UsersController.deleteUser);
 
 export default router;
