@@ -2,11 +2,6 @@ import mongoose from "mongoose";
 
 const userModel = new mongoose.Schema(
     {
-        keycloakId: {
-            type: String,
-            required: true,
-            unique: true
-        },
         email: {
             type: String,
             required: true,
@@ -17,6 +12,10 @@ const userModel = new mongoose.Schema(
             required: true,
             unique: true
         },
+        password: {
+            type: String,
+            required: true
+        },
         firstName: {
             type: String
         },
@@ -25,10 +24,21 @@ const userModel = new mongoose.Schema(
         },
         roles: [{
             type: String,
-            enum: ['user', 'admin', 'hotel_manager']
+            enum: ['admin', 'user', 'unlogged'],
+            default: ['unlogged']
         }]
     }, 
-    { timestamps: true }
+    { 
+        timestamps: true,
+        collection: 'users'
+    }
 );
 
-export default mongoose.model('users', userModel);
+userModel.index({ email: 1 }, { unique: true });
+userModel.index({ nickname: 1 }, { unique: true });
+
+const User = mongoose.model('users', userModel);
+
+User.syncIndexes();
+
+export default User;

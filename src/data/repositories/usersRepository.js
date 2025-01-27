@@ -1,26 +1,34 @@
 import UserModel from '../../core/models/userModel.js';
 
-export const create = async (userData) => {
-    const user = new UserModel(userData);
-    return await user.save();
-};
+class UsersRepository {
+    async createUser(userData) {
+        const user = new UserModel(userData);
+        return await user.save();
+    }
 
-export const findByNickname = async (nickname) => {
-    return await UserModel.findOne({ nickname });
-};
+    async getAllUsers() {
+        return await UserModel.find();
+    }
 
-export const getAll = async () => {
-    return await UserModel.find({});
-};
+    async getUserById(id) {
+        return await UserModel.findById(id);
+    }
 
-export const getById = async (id) => {
-    return await UserModel.findById(id);
-};
+    async getUserByEmail(email) {
+        return await UserModel.findOne({ email });
+    }
 
-export const update = async (id, userData) => {
-    return await UserModel.findByIdAndUpdate(id, userData, { new: true });
-};
+    async updateUser(id, userData) {
+        return await UserModel.findByIdAndUpdate(id, userData, { new: true });
+    }
+    
+    async getUserByNickname(nickname) {
+        return await UserModel.findOne({ nickname });
+    }
 
-export const findAndDelete = async (id) => {
-    return await UserModel.findByIdAndDelete(id);
-};
+    async deleteUser(id) {
+        return await UserModel.findByIdAndDelete(id);
+    }
+}
+
+export default new UsersRepository();

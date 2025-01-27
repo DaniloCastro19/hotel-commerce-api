@@ -1,6 +1,8 @@
 import { body, param } from 'express-validator';
 import { validateResult } from './validationUtils.js';
 
+const VALID_ROLES = ['user', 'unlogged', 'admin'];
+
 export const validateRegister = [
     body('email')
         .notEmpty().withMessage('Email is required')
@@ -35,9 +37,8 @@ export const validateRegister = [
         .optional()
         .isArray().withMessage('Roles must be an array')
         .custom((value) => {
-            const validRoles = ['user', 'admin', 'hotel_manager'];
-            return value.every(role => validRoles.includes(role));
-        }).withMessage('Invalid role(s). Valid roles are: user, admin, hotel_manager'),
+            return value.every(role => VALID_ROLES.includes(role));
+        }).withMessage('Invalid role(s). Valid roles are: user, unlogged, admin'),
     
     validateResult
 ];
@@ -73,9 +74,8 @@ export const validateUpdate = [
         .optional()
         .isArray().withMessage('Roles must be an array')
         .custom((value) => {
-            const validRoles = ['user', 'admin', 'hotel_manager'];
-            return value.every(role => validRoles.includes(role));
-        }).withMessage('Invalid role(s). Valid roles are: user, admin, hotel_manager'),
+            return value.every(role => VALID_ROLES.includes(role));
+        }).withMessage('Invalid role(s). Valid roles are: user, unlogged, admin'),
     
     validateResult
 ];
@@ -83,5 +83,18 @@ export const validateUpdate = [
 export const validateId = [
     param('id')
         .isMongoId().withMessage('Invalid user ID format'),
+    validateResult
+];
+
+export const validateLogin = [
+    body('email')
+        .notEmpty().withMessage('Email is required')
+        .isEmail().withMessage('Invalid email format')
+        .trim(),
+    
+    body('password')
+        .notEmpty().withMessage('Password is required')
+        .isLength({ min: 8 }).withMessage('Password must be at least 8 characters long'),
+    
     validateResult
 ]; 
