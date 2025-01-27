@@ -5,7 +5,7 @@ export class CreateUserDto {
         this.firstName = data.firstName;
         this.lastName = data.lastName;
         this.password = data.password;
-        this.roles = data.roles || ['user'];
+        this.roles = data.roles || ['unlogged'];
     }
 }
 
@@ -21,7 +21,7 @@ export class UpdateUserDto {
 
 export class LoginUserDto {
     constructor(data) {
-        this.nickname = data.nickname;
+        this.email = data.email;
         this.password = data.password;
     }
 }
@@ -29,7 +29,6 @@ export class LoginUserDto {
 export class UserResponseDto {
     constructor(user) {
         this.id = user._id;
-        this.keycloakId = user.keycloakId;
         this.email = user.email;
         this.nickname = user.nickname;
         this.firstName = user.firstName;

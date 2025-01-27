@@ -1,54 +1,8 @@
-import { Router } from "express";
-import { register, getAllUsers, getUser, updateUser, deleteUser,login } from "../controllers/usersControllers.js";
-import { validateAuth, requireRoles } from "../../core/middlewares/authMiddleware.js";
-import { validateRegister, validateUpdate, validateId } from "../../core/utilities/validations/userValidations.js";
+import express from 'express';
+import UsersController from '../controllers/usersControllers.js';
+import { validateRegister, validateLogin, validateUpdate, validateId } from '../../core/utilities/validations/userValidations.js';
 
-const userRoutes = Router();
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       required:
- *         - email
- *         - nickname
- *         - password
- *       properties:
- *         id:
- *           type: string
- *           description: Auto-generated user ID
- *         email:
- *           type: string
- *           format: email
- *           description: User's email address
- *         nickname:
- *           type: string
- *           description: User's unique nickname
- *         firstName:
- *           type: string
- *           description: User's first name
- *         lastName:
- *           type: string
- *           description: User's last name
- *         password:
- *           type: string
- *           description: User's password (only required for registration)
- *         roles:
- *           type: array
- *           items:
- *             type: string
- *             enum: [user, admin, hotel_manager]
- *           description: User's roles
- */
-
-/**
- * @swagger
- * tags:
- *   name: Users
- *   description: User management endpoints
- */
+const router = express.Router();
 
 /**
  * @swagger
@@ -72,25 +26,25 @@ const userRoutes = Router();
  *                 format: email
  *               nickname:
  *                 type: string
+ *                 minLength: 3
  *               password:
  *                 type: string
+ *                 minLength: 8
  *               firstName:
  *                 type: string
  *               lastName:
  *                 type: string
- *               roles:
- *                 type: array
- *                 items:
- *                   type: string
  *     responses:
  *       201:
  *         description: User registered successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserResponse'
  *       400:
- *         description: Validation error
- *       409:
- *         description: Email or nickname already exists
+ *         description: Invalid input data
  */
-userRoutes.post('/register', validateRegister, register);
+router.post('/register', validateRegister, UsersController.register);
 
 /**
  * @swagger
@@ -105,30 +59,128 @@ userRoutes.post('/register', validateRegister, register);
  *           schema:
  *             type: object
  *             required:
- *               - nickname
+ *               - email
  *               - password
  *             properties:
- *               nickname:
+ *               email:
  *                 type: string
+ *                 format: email
  *               password:
  *                 type: string
  *     responses:
  *       200:
  *         description: Login successful
- *       400:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                 user:
+ *                   $ref: '#/components/schemas/UserResponse'
+ *       401:
  *         description: Invalid credentials
  */
-userRoutes.post('/login', login);
+router.post('/login', validateLogin, UsersController.login);
 
-// Protected routes
-userRoutes.use(validateAuth);
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Get all users
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: List of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ */
+router.get('/', UsersController.getAllUsers);
 
-// Admin only routes
-userRoutes.get('/', requireRoles('admin'), getAllUsers);
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   get:
+ *     summary: Get user by ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User details
+ *       404:
+ *         description: User not found
+ */
+router.get('/:id', validateId, UsersController.getUserById);
 
-// User or Admin routes
-userRoutes.get('/:id', validateId, requireRoles('user', 'admin'), getUser);
-userRoutes.put('/:id', validateUpdate, requireRoles('user', 'admin'), updateUser);
-userRoutes.delete('/:id', validateId, requireRoles('admin'), deleteUser);
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   put:
+ *     summary: Update user
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               nickname:
+ *                 type: string
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               roles:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   enum: [admin, user, unlogged]
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       404:
+ *         description: User not found
+ */
+router.put('/:id', validateUpdate, UsersController.updateUser);
 
-export default userRoutes;
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   delete:
+ *     summary: Delete user
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *       404:
+ *         description: User not found
+ */
+router.delete('/:id', validateId, UsersController.deleteUser);
+
+export default router;
