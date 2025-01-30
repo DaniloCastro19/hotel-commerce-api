@@ -7,7 +7,7 @@ export const validateBody = [
     check("hotelId").isString().withMessage("hotelId must be string"),
 
     check("roomNumber").notEmpty().withMessage("roomNumber cannot be empty"),
-    check("roomNumber").isString().withMessage("roomNumber must be string"),
+    check("roomNumber").isInt().withMessage("roomNumber must be integer"),
 
     check("userId").notEmpty().withMessage("userId cannot be empty"),
     check("userId").isString().withMessage("userId must be string"),

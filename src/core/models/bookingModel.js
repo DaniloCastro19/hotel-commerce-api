@@ -3,9 +3,13 @@ import mongoose from "mongoose";
 
 const bookingModel = new mongoose.Schema(
     {
-        reservationDate:{
+        startReservationDate:{
             type: Date,
             min: Date.now(),
+            require: true
+        },
+        endReservationDate:{
+            type: Date,
             require: true
         },
         userID:{

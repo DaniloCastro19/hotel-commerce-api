@@ -12,7 +12,7 @@ const roomModel = new mongoose.Schema(
             require: true
         },
         roomNumber:{
-            type: String,
+            type: Number,
             require: true
         },
         roomType:{
