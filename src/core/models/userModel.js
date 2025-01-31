@@ -29,7 +29,7 @@ const userModel = new mongoose.Schema(
     }
 );
 
-userModel.index({ email: 1 }, { unique: true });
+
 
 const User = mongoose.model('users', userModel);
 

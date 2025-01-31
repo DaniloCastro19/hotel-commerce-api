@@ -1,8 +1,11 @@
 import {Router} from "express";
 import { getAllRooms, getRoom, createRoom, updateRoom, deleteRoom, filterRooms } from "../controllers/roomController.js";
-import { validateBody } from "../../core/utilities/validations/roomsValidations.js";
+import { validateBody} from "../../core/utilities/validations/roomsValidations.js";
 import { verifyToken, isAdmin } from '../../core/middlewares/authMiddleware.js';
+import { filterExtraFields } from "../../core/middlewares/filterFileds.js";
 const roomRoutes = Router();
+
+const postValidFields = ['roomNumber','roomType', 'nBeds','capacity','available','pricePerNight'];
 
 /**
  * @swagger
@@ -92,7 +95,7 @@ const roomRoutes = Router();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-roomRoutes.get('/', getAllRooms);
+roomRoutes.get('/:hotelId/rooms', getAllRooms);
 
 /**
  * @swagger
@@ -142,7 +145,7 @@ roomRoutes.get('/', getAllRooms);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-roomRoutes.get('/search', filterRooms);
+roomRoutes.get('/:hotelId/rooms/search', filterRooms);
 
 /**
  * @swagger
@@ -172,7 +175,7 @@ roomRoutes.get('/search', filterRooms);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-roomRoutes.get('/:id', getRoom);
+roomRoutes.get('/:hotelId/rooms/:id', getRoom);
 
 /**
  * @swagger
@@ -209,7 +212,7 @@ roomRoutes.get('/:id', getRoom);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-roomRoutes.post('/', verifyToken, isAdmin, validateBody, createRoom);
+roomRoutes.post('/:hotelId/rooms', verifyToken, isAdmin, filterExtraFields(postValidFields),validateBody, createRoom);
 
 /**
  * @swagger
@@ -260,7 +263,7 @@ roomRoutes.post('/', verifyToken, isAdmin, validateBody, createRoom);
  *               $ref: '#/components/schemas/Error'
  * 
  */
-roomRoutes.put('/:id', verifyToken, isAdmin, validateBody, updateRoom);
+roomRoutes.put('/:hotelId/rooms', verifyToken, isAdmin, validateBody, updateRoom);
 
 /**
  * @swagger
@@ -293,6 +296,6 @@ roomRoutes.put('/:id', verifyToken, isAdmin, validateBody, updateRoom);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-roomRoutes.delete('/:id', verifyToken, isAdmin, deleteRoom);
+roomRoutes.delete('/:hotelId/rooms', verifyToken, isAdmin, deleteRoom);
 
 export default roomRoutes;

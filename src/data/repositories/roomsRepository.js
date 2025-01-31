@@ -6,7 +6,7 @@ import Room from "../../core/models/roomModel.js";
     }
 
     export const getAll = async () => {
-        return await Room.find()
+        return await Room.find();
     } ;
     
     

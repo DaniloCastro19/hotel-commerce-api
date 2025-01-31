@@ -43,7 +43,7 @@ app.use(httpErrorHandler);
 const apiRouter = express.Router();
 
 apiRouter.use('/users', userRoutes);
-apiRouter.use('/rooms', roomRoutes);
+apiRouter.use('/hotel', roomRoutes);
 apiRouter.use('/hotels', hotelsRouter);
 
 app.use(`/${API_PREFIX}`, apiRouter);

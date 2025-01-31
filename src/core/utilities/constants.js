@@ -4,6 +4,6 @@ export class Constants {
         "Double":2,
         "Triple":3,
         "SuiteCouple":1,
-        "SuiteFamiliar":3
+        "SuiteFamiliar":2
     }
 }

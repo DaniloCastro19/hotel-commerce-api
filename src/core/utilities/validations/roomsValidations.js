@@ -9,9 +9,6 @@ export const validateBody = [
     check("roomNumber").notEmpty().withMessage("roomNumber cannot be empty"),
     check("roomNumber").isInt().withMessage("roomNumber must be integer"),
 
-    check("userId").notEmpty().withMessage("userId cannot be empty"),
-    check("userId").isString().withMessage("userId must be string"),
-
     check("nBeds").notEmpty().withMessage("nBeds cannot be empty"),
     check("nBeds").isInt().withMessage("nBeds must be an integer"),
 
@@ -26,6 +23,4 @@ export const validateBody = [
         
         validateResult(req,res,next)
     }
-
-
 ]

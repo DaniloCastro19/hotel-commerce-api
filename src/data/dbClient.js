@@ -16,9 +16,9 @@ class DatabaseClient {
             console.log('Connected to MongoDB');
 
             // Eliminar la colección users si existe y recrearla
-            await mongoose.connection.db.dropCollection('users').catch(() => {
-                console.log('Collection users does not exist yet');
-            });
+            // await mongoose.connection.db.dropCollection('users').catch(() => {
+            //     console.log('Collection users does not exist yet');
+            // });
             
             console.log('Database reset completed');
         } catch (error) {
