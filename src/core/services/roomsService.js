@@ -1,6 +1,7 @@
 import { getAll, create, getById, update, findAndDelete, isIdExisting} from "../../data/repositories/roomsRepository.js";
 import { isHotelExisting } from "../../data/repositories/hotelsRepository.js";
 
+
 export default class RoomService{
     constructor(){
     }

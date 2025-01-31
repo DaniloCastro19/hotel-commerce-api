@@ -1,11 +1,11 @@
 import {Router} from "express";
 import { getAllRooms, getRoom, createRoom, updateRoom, deleteRoom, filterRooms } from "../controllers/roomController.js";
-import { validateBody} from "../../core/utilities/validations/roomsValidations.js";
+import { validateBody, validateRoomType} from "../../core/utilities/validations/roomsValidations.js";
 import { verifyToken, isAdmin } from '../../core/middlewares/authMiddleware.js';
 import { filterExtraFields } from "../../core/middlewares/filterFileds.js";
 const roomRoutes = Router();
 
-const postValidFields = ['roomNumber','roomType', 'nBeds','capacity','available','pricePerNight'];
+const validFields = ['roomNumber','roomType', 'nBeds','capacity','available','pricePerNight'];
 
 /**
  * @swagger
@@ -212,7 +212,7 @@ roomRoutes.get('/:hotelId/rooms/:id', getRoom);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-roomRoutes.post('/:hotelId/rooms', verifyToken, isAdmin, filterExtraFields(postValidFields),validateBody, createRoom);
+roomRoutes.post('/:hotelId/rooms', verifyToken, isAdmin, filterExtraFields(validFields),validateBody,validateRoomType, createRoom);
 
 /**
  * @swagger
@@ -263,7 +263,7 @@ roomRoutes.post('/:hotelId/rooms', verifyToken, isAdmin, filterExtraFields(postV
  *               $ref: '#/components/schemas/Error'
  * 
  */
-roomRoutes.put('/:hotelId/rooms', verifyToken, isAdmin, validateBody, updateRoom);
+roomRoutes.put('/:hotelId/rooms', verifyToken, isAdmin, filterExtraFields(validFields),validateBody, validateRoomType,updateRoom);
 
 /**
  * @swagger

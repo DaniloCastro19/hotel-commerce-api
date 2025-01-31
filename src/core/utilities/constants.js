@@ -1,4 +1,5 @@
-export class Constants {
+export default class Constants {
+    static ROOM_TYPES = ["Simple","Double","Triple","SuiteCouple","SuiteFamiliar"];
     static ROOM_TYPES_N_BEDS ={
         "Simple":1,
         "Double":2,
