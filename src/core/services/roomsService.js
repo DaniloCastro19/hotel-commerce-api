@@ -1,12 +1,16 @@
 import { getAll, create, getById, update, findAndDelete, isIdExisting} from "../../data/repositories/roomsRepository.js";
+import { isHotelExisting } from "../../data/repositories/hotelsRepository.js";
+
 
 export default class RoomService{
     constructor(){
     }
 
-    async getAllRooms(){
-        const rooms = await getAll();
-        return rooms;
+    async getAllRooms(hotelId){
+        const allRooms = await getAll();
+        const roomsByHotelId = allRooms.filter(room => room.hotelId===hotelId);
+
+        return roomsByHotelId;
     }
 
 
@@ -19,7 +23,12 @@ export default class RoomService{
     }
 
 
-    async createRoom (body) {
+    async createRoom (hotelId, body) {
+        const hotelExist = await isHotelExisting(hotelId);
+        if (!hotelExist){
+            return null
+        }
+        body.hotelId=hotelId
         const newRoom = await create(body);
         return newRoom;
     }

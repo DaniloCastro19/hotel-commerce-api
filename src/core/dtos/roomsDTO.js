@@ -1,5 +1,5 @@
 export class CreateRoomDto {
     constructor(data) {
-        this.roomType = data.nickname;
+        this.roomType = data.roomType;
     }
 }

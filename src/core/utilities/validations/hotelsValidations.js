@@ -21,9 +21,6 @@ export const validateBody = [
     check("roomTypes").notEmpty().withMessage("roomTypes cannot be empty"),
     check("roomTypes").isArray().withMessage("roomTypes must be an array"),
 
-    check("amenities").notEmpty().withMessage("amenities cannot be empty"),
-    check("amenities").isArray().withMessage("amenities must be an array"),
-
     check("averagePricePerNight").notEmpty().withMessage("averagePricePerNight cannot be empty"),
     check("averagePricePerNight").isFloat().withMessage("averagePricePerNight must be an array"),
 
