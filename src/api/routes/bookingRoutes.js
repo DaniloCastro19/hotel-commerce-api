@@ -1,65 +1,14 @@
-import { Router } from 'express';
-import { BookingController } from '../controllers/bookingController.js';
-import { verifyToken, isUser } from '../../core/middlewares/authMiddleware.js';
+import express from 'express';
+import { createBooking, getBookings, getBookingById, cancelBooking } from '../controllers/bookingController.js';
+import { verifyToken } from '../../core/middlewares/authMiddleware.js';
 
-const router = Router();
-
-/**
- * @swagger
- * tags:
- *   name: Bookings
- *   description: Booking management endpoints
- */
+const router = express.Router();
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     Booking:
- *       type: object
- *       required:
- *         - roomId
- *         - checkInDate
- *         - checkOutDate
- *       properties:
- *         id:
- *           type: string
- *           description: Auto-generated booking ID
- *           example: "6791b530d1a99c3c3c34c1b5"
- *         userId:
- *           type: string
- *           description: ID of the user making the booking
- *           example: "6791b530d1a99c3c3c34c1b3"
- *         roomId:
- *           type: string
- *           description: ID of the room being booked
- *           example: "6791b530d1a99c3c3c34c1b4"
- *         checkInDate:
- *           type: string
- *           format: date
- *           description: Check-in date
- *           example: "2024-04-01"
- *         checkOutDate:
- *           type: string
- *           format: date
- *           description: Check-out date
- *           example: "2024-04-05"
- *         totalPrice:
- *           type: number
- *           description: Total price for the booking
- *           example: 800
- *         status:
- *           type: string
- *           enum: [pending, confirmed, cancelled]
- *           description: Booking status
- *           example: "confirmed"
- */
-
-/**
- * @swagger
- * /bookings:
+ * /api/bookings:
  *   post:
- *     summary: Create a new booking
+ *     summary: Crear una nueva reserva
  *     tags: [Bookings]
  *     security:
  *       - bearerAuth: []
@@ -70,86 +19,78 @@ const router = Router();
  *           schema:
  *             type: object
  *             required:
- *               - roomId
- *               - checkInDate
- *               - checkOutDate
+ *               - startReservationDate
+ *               - endReservationDate
+ *               - userID
+ *               - hotelID
+ *               - roomID
  *             properties:
- *               roomId:
- *                 type: string
- *                 example: "6791b530d1a99c3c3c34c1b4"
- *               checkInDate:
+ *               startReservationDate:
  *                 type: string
  *                 format: date
- *                 example: "2024-04-01"
- *               checkOutDate:
+ *                 description: Fecha de inicio de la reserva
+ *               endReservationDate:
  *                 type: string
  *                 format: date
- *                 example: "2024-04-05"
+ *                 description: Fecha de fin de la reserva
+ *               userID:
+ *                 type: string
+ *                 description: ID del usuario que realiza la reserva
+ *               hotelID:
+ *                 type: string
+ *                 description: ID del hotel
+ *               roomID:
+ *                 type: string
+ *                 description: ID de la habitación
  *     responses:
  *       201:
- *         description: Booking created successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Booking'
+ *         description: Reserva creada exitosamente
  *       400:
- *         description: Invalid input or dates
+ *         description: Datos inválidos o habitación no disponible
  *       401:
- *         description: Unauthorized
- *       404:
- *         description: Room not found
+ *         description: No autorizado
  */
-router.post('/', verifyToken, isUser, BookingController.createBooking);
+router.post('/bookings', verifyToken, createBooking);
 
 /**
  * @swagger
- * /bookings/all:
+ * /api/bookings:
  *   get:
- *     summary: Get all bookings (Admin only)
+ *     summary: Obtener todas las reservas
  *     tags: [Bookings]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: List of all bookings
+ *         description: Lista de reservas
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Booking'
- *       401:
- *         description: Unauthorized
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   startReservationDate:
+ *                     type: string
+ *                     format: date
+ *                   endReservationDate:
+ *                     type: string
+ *                     format: date
+ *                   totalPrice:
+ *                     type: number
+ *                   status:
+ *                     type: string
+ *                     enum: [pending, confirmed, cancelled]
  */
-router.get('/all', verifyToken, isUser, BookingController.getAllBookings);
+router.get('/bookings', verifyToken, getBookings);
 
 /**
  * @swagger
- * /bookings/my-bookings:
+ * /api/bookings/{id}:
  *   get:
- *     summary: Get user's bookings
- *     tags: [Bookings]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: List of user's bookings
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Booking'
- *       401:
- *         description: Unauthorized
- */
-router.get('/my-bookings', verifyToken, isUser, BookingController.getUserBookings);
-
-/**
- * @swagger
- * /bookings/{id}:
- *   get:
- *     summary: Get booking by ID
+ *     summary: Obtener una reserva por ID
  *     tags: [Bookings]
  *     security:
  *       - bearerAuth: []
@@ -159,26 +100,20 @@ router.get('/my-bookings', verifyToken, isUser, BookingController.getUserBooking
  *         required: true
  *         schema:
  *           type: string
- *         description: Booking ID
+ *         description: ID de la reserva
  *     responses:
  *       200:
- *         description: Booking details
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Booking'
- *       401:
- *         description: Unauthorized
+ *         description: Detalles de la reserva
  *       404:
- *         description: Booking not found
+ *         description: Reserva no encontrada
  */
-router.get('/:id', verifyToken, isUser, BookingController.getBookingById);
+router.get('/bookings/:id', verifyToken, getBookingById);
 
 /**
  * @swagger
- * /bookings/{id}/cancel:
- *   patch:
- *     summary: Cancel a booking
+ * /api/bookings/{id}:
+ *   delete:
+ *     summary: Cancelar una reserva
  *     tags: [Bookings]
  *     security:
  *       - bearerAuth: []
@@ -188,19 +123,13 @@ router.get('/:id', verifyToken, isUser, BookingController.getBookingById);
  *         required: true
  *         schema:
  *           type: string
- *         description: Booking ID
+ *         description: ID de la reserva a cancelar
  *     responses:
  *       200:
- *         description: Booking cancelled successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Booking'
- *       401:
- *         description: Unauthorized
+ *         description: Reserva cancelada exitosamente
  *       404:
- *         description: Booking not found
+ *         description: Reserva no encontrada
  */
-router.patch('/:id/cancel', verifyToken, isUser, BookingController.cancelBooking);
+router.delete('/bookings/:id', verifyToken, cancelBooking);
 
-export default router; 
+export default router;

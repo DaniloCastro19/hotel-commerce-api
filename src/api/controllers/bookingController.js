@@ -1,61 +1,46 @@
 import { BookingService } from '../../core/services/bookingService.js';
-import { ENTITY_NOT_FOUND } from '../../core/utilities/customErrors.js';
 
 const bookingService = new BookingService();
 
-export class BookingController {
-    static async createBooking(req, res, next) {
-        try {
-            const bookingData = {
-                ...req.body,
-                userId: req.user.id // From auth middleware
-            };
-            const booking = await bookingService.createBooking(bookingData);
-            res.status(201).json(booking);
-        } catch (error) {
-            next(error);
-        }
+export const createBooking = async (req, res) => {
+    try {
+        const bookingData = req.body;
+        const booking = await bookingService.createReservation(bookingData);
+        res.status(201).json(booking);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
     }
+};
 
-    static async getAllBookings(req, res, next) {
-        try {
-            const bookings = await bookingService.getAllBookings();
-            res.status(200).json(bookings);
-        } catch (error) {
-            next(error);
-        }
+export const getBookings = async (req, res) => {
+    try {
+        const bookings = await bookingService.getUsersReservations();
+        res.status(200).json(bookings);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
+};
 
-    static async getBookingById(req, res, next) {
-        try {
-            const booking = await bookingService.getBookingById(req.params.id);
-            if (!booking) {
-                throw ENTITY_NOT_FOUND('Booking');
-            }
-            res.status(200).json(booking);
-        } catch (error) {
-            next(error);
+export const getBookingById = async (req, res) => {
+    try {
+        const booking = await bookingService.getReservationById(req.params.id);
+        if (!booking) {
+            return res.status(404).json({ message: 'Reserva no encontrada' });
         }
+        res.status(200).json(booking);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
+};
 
-    static async getUserBookings(req, res, next) {
-        try {
-            const bookings = await bookingService.getUserBookings(req.user.id);
-            res.status(200).json(bookings);
-        } catch (error) {
-            next(error);
+export const cancelBooking = async (req, res) => {
+    try {
+        const booking = await bookingService.cancelReservation(req.params.id);
+        if (!booking) {
+            return res.status(404).json({ message: 'Reserva no encontrada' });
         }
+        res.status(200).json({ message: 'Reserva cancelada exitosamente' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-
-    static async cancelBooking(req, res, next) {
-        try {
-            const booking = await bookingService.cancelBooking(req.params.id);
-            if (!booking) {
-                throw ENTITY_NOT_FOUND('Booking');
-            }
-            res.status(200).json(booking);
-        } catch (error) {
-            next(error);
-        }
-    }
-} 
+};
