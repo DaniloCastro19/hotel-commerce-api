@@ -1,4 +1,4 @@
-import { getAll, create, getById, update, findAndDelete, isIdExisting} from "../../data/repositories/hotelsRepository.js";
+import { getAll, create, getById, update, findAndDelete, isHotelExisting} from "../../data/repositories/hotelsRepository.js";
 
 export class HotelServices {
 
@@ -23,7 +23,7 @@ export class HotelServices {
   }
 
   async updateHotel(id, hotelData) {
-    const hotelExist = await isIdExisting(id);
+    const hotelExist = await isHotelExisting(id);
     if (!hotelExist){
       return null
     }
@@ -32,7 +32,7 @@ export class HotelServices {
   }
 
   async deleteHotel(id) {
-    const hotelExist = await isIdExisting(id);
+    const hotelExist = await isHotelExisting(id);
     if (!hotelExist){
       return null
     }

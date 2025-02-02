@@ -105,12 +105,6 @@ class UsersController {
                 return res.status(400).json({ message: 'Email already exists' });
             }
 
-            // Verificar si el nickname ya existe
-            const existingNickname = await UsersRepository.getUserByNickname(userData.nickname);
-            if (existingNickname) {
-                return res.status(400).json({ message: 'Nickname already exists' });
-            }
-
             // Hash de la contraseña
             const salt = await bcrypt.genSalt(10);
             userData.password = await bcrypt.hash(userData.password, salt);

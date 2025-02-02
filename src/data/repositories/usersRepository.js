@@ -22,9 +22,6 @@ class UsersRepository {
         return await UserModel.findByIdAndUpdate(id, userData, { new: true });
     }
     
-    async getUserByNickname(nickname) {
-        return await UserModel.findOne({ nickname });
-    }
 
     async deleteUser(id) {
         return await UserModel.findByIdAndDelete(id);

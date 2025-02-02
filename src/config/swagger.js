@@ -56,10 +56,6 @@ const swaggerDefinition = {
             format: 'email',
             description: 'User email'
           },
-          nickname: {
-            type: 'string',
-            description: 'User nickname'
-          },
           firstName: {
             type: 'string',
             description: 'User first name'
@@ -100,10 +96,6 @@ const swaggerDefinition = {
             type: 'string',
             format: 'email',
             description: 'User email'
-          },
-          nickname: {
-            type: 'string',
-            description: 'User nickname'
           },
           firstName: {
             type: 'string',
