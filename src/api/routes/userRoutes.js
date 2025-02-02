@@ -19,15 +19,11 @@ const router = express.Router();
  *             type: object
  *             required:
  *               - email
- *               - nickname
  *               - password
  *             properties:
  *               email:
  *                 type: string
  *                 format: email
- *               nickname:
- *                 type: string
- *                 minLength: 3
  *               password:
  *                 type: string
  *                 minLength: 8
@@ -145,8 +141,6 @@ router.get('/:id', verifyToken, validateId, UsersController.getUserById);
  *               email:
  *                 type: string
  *                 format: email
- *               nickname:
- *                 type: string
  *               firstName:
  *                 type: string
  *               lastName:

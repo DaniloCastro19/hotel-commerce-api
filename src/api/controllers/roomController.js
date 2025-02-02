@@ -5,7 +5,7 @@ const roomService = new RoomService();
 
 export const getAllRooms = async (req, res, next) =>{   
     try{
-        const rooms = await roomService.getAllRooms();
+        const rooms = await roomService.getAllRooms(req.params.hotelId);
         return res.status(200).json(rooms);
     }catch(error){
         next(error);
@@ -25,7 +25,8 @@ export const getRoom = async (req, res, next) =>{
 
 export const createRoom = async (req, res, next) =>{   
     try{
-        const room = await roomService.createRoom(req.body);
+        const room = await roomService.createRoom(req.params.hotelId,req.body);
+        if (room == null){throw ENTITY_NOT_FOUND('Hotel')}
         return res.status(201).json(room);
     }catch(error){
         next(error);

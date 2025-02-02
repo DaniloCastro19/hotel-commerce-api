@@ -1,75 +1,42 @@
-import * as bookingRepository from '../../data/repositories/bookingRepository.js';
-import { INVALID_INPUT, ENTITY_NOT_FOUND } from '../utilities/customErrors.js';
+import { getAll, create, getById, update, findAndDelete, isIdExisting} from "../../data/repositories/bookingRepository";
 
 export class BookingService {
-    async createBooking(bookingData) {
-        const { roomId, checkInDate, checkOutDate } = bookingData;
-        
-        const startDate = new Date(checkInDate);
-        const endDate = new Date(checkOutDate);
-        
-        if (startDate >= endDate) {
-            throw INVALID_INPUT('Check-out date must be after check-in date');
-        }
-        
-        if (startDate < new Date()) {
-            throw INVALID_INPUT('Check-in date cannot be in the past');
-        }
 
-        const isAvailable = await bookingRepository.isRoomAvailable(
-            roomId,
-            startDate,
-            endDate
-        );
+  constructor(){}
 
-        if (!isAvailable) {
-            throw INVALID_INPUT('Room is not available for the selected dates');
-        }
+  async getUsersReservations() {
+    const data = await getAll();
+    return data;
+  }
 
-        const pricePerNight = await bookingRepository.getRoomPrice(roomId);
-        if (!pricePerNight) {
-            throw ENTITY_NOT_FOUND('Room');
-        }
-
-        const nights = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-        const totalPrice = nights * pricePerNight;
-
-        return await bookingRepository.createBooking({
-            ...bookingData,
-            totalPrice,
-            status: 'confirmed'
-        });
+  async getReservationById(id) {
+    const reservation = await getById(id);
+    if(!reservation){
+      return null
     }
+    return reservation
+  }
 
-    async getAllBookings() {
-        return await bookingRepository.getAllBookings();
-    }
+  async createReservation(reservationData) {
+    const reservation = await create(reservationData);
+    return reservation;
+  }
 
-    async getBookingById(id) {
-        const booking = await bookingRepository.getBookingById(id);
-        if (!booking) {
-            return null;
-        }
-        return booking;
+  async updateReservation(id, hotelData) {
+    const reservationExist = await isIdExisting(id);
+    if (!reservationExist){
+      return null
     }
+    const updatedReservation = await update(id,hotelData);
+    return updatedReservation
+  }
 
-    async getUserBookings(userId) {
-        return await bookingRepository.getUserBookings(userId);
+  async cancelReservation(id) {
+    const reservationExist = await isIdExisting(id);
+    if (!reservationExist){
+      return null
     }
-
-    async updateBooking(id, data) {
-        const booking = await this.getBookingById(id);
-        if (!booking) {
-            return null;
-        }
-        return await bookingRepository.updateBooking(id, data);
-    }
-
-    async cancelBooking(id) {
-        const booking = await this.getBookingById(id);
-        if (!booking) {
-            return null;
-        }
-        return await bookingRepository.updateBooking(id, { status: 'cancelled' });
-    }
-} 
+    const cancelledReservation = await findAndDelete(id);
+    return cancelledReservation
+  }
+}

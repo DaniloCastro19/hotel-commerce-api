@@ -1,47 +1,28 @@
-import Booking from "../../core/models/bookingModel.js";
-import Room from "../../core/models/roomModel.js";
+import Booking from "../../core/models/bookingModel.js"
 
-export const createBooking = async (bookingData) => {
-    const booking = new Booking(bookingData);
-    return await booking.save();
-};
+    export const isIdExisting = async (id) =>{
+        return await Booking.exists({_id:id});
+    }
 
-export const getAllBookings = async () => {
-    return await Booking.find();
-};
-
-export const getBookingById = async (id) => {
-    return await Booking.findById(id);
-};
-
-export const getUserBookings = async (userId) => {
-    return await Booking.find({ userId: userId });
-};
-
-export const updateBooking = async (id, data) => {
-    return await Booking.findByIdAndUpdate(id, data, { new: true });
-};
-
-export const deleteBooking = async (id) => {
-    return await Booking.findByIdAndDelete(id);
-};
-
-export const isRoomAvailable = async (roomId, checkInDate, checkOutDate) => {
-    const conflictingBookings = await Booking.find({
-        roomId: roomId,
-        status: 'confirmed',
-        $or: [
-            {
-                checkInDate: { $lte: checkOutDate },
-                checkOutDate: { $gte: checkInDate }
-            }
-        ]
-    });
+    export const getAll = async () => {
+        return await Booking.find()
+    } ;
     
-    return conflictingBookings.length === 0;
-};
+    
+    export const getById = async (id) => {
+        const reservation = Booking.findById(id);
+        return reservation
+    } 
 
-export const getRoomPrice = async (roomId) => {
-    const room = await Room.findById(roomId);
-    return room ? room.pricePerNight : null;
-}; 
+    export const create = async (data) =>  {
+        const reservation = new Booking(data);
+        return await reservation.save();
+    };
+
+    export const update = async (id, body) => {
+        return await Booking.findByIdAndUpdate(id,body, {new:true});
+    };
+
+    export const findAndDelete = async (id) => {
+        return await Booking.findOneAndDelete({_id:id});
+    };

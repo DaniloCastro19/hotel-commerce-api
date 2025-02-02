@@ -9,12 +9,6 @@ export const validateRegister = [
         .isEmail().withMessage('Invalid email format')
         .trim(),
     
-    body('nickname')
-        .notEmpty().withMessage('Nickname is required')
-        .isLength({ min: 3, max: 30 }).withMessage('Nickname must be between 3 and 30 characters')
-        .matches(/^[a-zA-Z0-9_-]+$/).withMessage('Nickname can only contain letters, numbers, underscores and dashes')
-        .trim(),
-    
     body('password')
         .notEmpty().withMessage('Password is required')
         .isLength({ min: 8 }).withMessage('Password must be at least 8 characters long')
@@ -50,12 +44,6 @@ export const validateUpdate = [
     body('email')
         .optional()
         .isEmail().withMessage('Invalid email format')
-        .trim(),
-    
-    body('nickname')
-        .optional()
-        .isLength({ min: 3, max: 30 }).withMessage('Nickname must be between 3 and 30 characters')
-        .matches(/^[a-zA-Z0-9_-]+$/).withMessage('Nickname can only contain letters, numbers, underscores and dashes')
         .trim(),
     
     body('firstName')

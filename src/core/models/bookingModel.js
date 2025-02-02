@@ -2,33 +2,38 @@ import mongoose from "mongoose";
 
 const bookingModel = new mongoose.Schema(
     {
-        userId: {
-            type: String,
-            required: true
-        },
-        roomId: {
-            type: String,
-            required: true
-        },
-        checkInDate: {
+        startReservationDate:{
             type: Date,
-            required: true
+            min: Date.now(),
+            require: true
         },
-        checkOutDate: {
+        endReservationDate:{
             type: Date,
-            required: true
+            require: true
         },
-        totalPrice: {
+        userID:{
+            type: ObjectId,
+            require: true
+        },
+        hotelID:{
+            type: ObjectId,
+            require: true
+        },
+        roomType:{
+            type: String,
+            require: true
+        },
+        nNights: {
             type: Number,
-            required: true
+            require: true
         },
-        status: {
-            type: String,
-            enum: ['pending', 'confirmed', 'cancelled'],
-            default: 'pending'
-        }
-    }, 
-    { timestamps: true }
+        isCancelled: {
+            type: Boolean,
+            require: true
+        },
+
+    }, {timestamps:false}
 );
 
-export default mongoose.model('bookings', bookingModel); 
+export default mongoose.model('reservations', bookingModel);
+

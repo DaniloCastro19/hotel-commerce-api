@@ -27,10 +27,6 @@ const hotelModel = new mongoose.Schema(
             type: Array,
             require: true
         },
-        amenities: {
-            type: Array,
-            require: true
-        },
         averagePricePerNight: {
             type: Number,
             require: true

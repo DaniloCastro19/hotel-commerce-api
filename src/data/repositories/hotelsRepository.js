@@ -1,6 +1,6 @@
 import Hotel from "../../core/models/hotelModel.js"
 
-    export const isIdExisting = async (id) =>{
+    export const isHotelExisting = async (id) =>{
         return await Hotel.exists({_id:id});
     }
 
