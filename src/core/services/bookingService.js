@@ -1,13 +1,30 @@
 import { getAll, create, getById, update, findAndDelete, isIdExisting} from "../../data/repositories/bookingRepository.js";
 import Room from "../models/roomModel.js";
+import Booking from "../models/bookingModel.js";
 
 export class BookingService {
 
   constructor(){}
 
-  async getUsersReservations() {
-    const data = await getAll();
-    return data;
+  // Obtener todas las reservas (Admin)
+  async getAllReservations() {
+    return await getAll();
+  }
+
+  // Obtener reservas de un hotel específico (Admin)
+  async getHotelReservations(hotelId) {
+    const bookings = await Booking.find({ hotelID: hotelId })
+      .populate('userID', 'firstName lastName email')
+      .populate('roomID', 'roomNumber roomType');
+    return bookings;
+  }
+
+  // Obtener reservas de un usuario específico
+  async getUserReservations(userId) {
+    const bookings = await Booking.find({ userID: userId })
+      .populate('hotelID', 'name location')
+      .populate('roomID', 'roomNumber roomType pricePerNight');
+    return bookings;
   }
 
   async getReservationById(id) {
@@ -50,16 +67,13 @@ export class BookingService {
     return updatedReservation
   }
 
-  async cancelReservation(id) {
-    const reservation = await getById(id);
-    if (!reservation) {
+  async cancelReservation(bookingId, userId) {
+    const reservation = await getById(bookingId);
+    if (!reservation || reservation.userID.toString() !== userId) {
       return null;
     }
 
-    // Actualizar el estado de la reserva
-    const cancelledReservation = await update(id, { status: 'cancelled' });
-
-    // Liberar la habitación
+    const cancelledReservation = await update(bookingId, { status: 'cancelled' });
     await Room.findByIdAndUpdate(reservation.roomID, { available: true });
 
     return cancelledReservation;

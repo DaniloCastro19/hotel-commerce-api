@@ -1,6 +1,6 @@
 import express from 'express';
-import { createBooking, getBookings, getBookingById, cancelBooking } from '../controllers/bookingController.js';
-import { verifyToken } from '../../core/middlewares/authMiddleware.js';
+import { createBooking, getBookings, getBookingById, cancelBooking, getAllUserBooking } from '../controllers/bookingController.js';
+import { verifyToken, isAdmin } from '../../core/middlewares/authMiddleware.js';
 
 const router = express.Router();
 
@@ -56,58 +56,60 @@ router.post('/bookings', verifyToken, createBooking);
  * @swagger
  * /api/bookings:
  *   get:
- *     summary: Obtener todas las reservas
+ *     summary: Obtener todas las reservas (Solo Admin)
  *     tags: [Bookings]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Lista de reservas
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   _id:
- *                     type: string
- *                   startReservationDate:
- *                     type: string
- *                     format: date
- *                   endReservationDate:
- *                     type: string
- *                     format: date
- *                   totalPrice:
- *                     type: number
- *                   status:
- *                     type: string
- *                     enum: [pending, confirmed, cancelled]
+ *         description: Lista de todas las reservas
+ *       401:
+ *         description: No autorizado
+ *       403:
+ *         description: Acceso denegado - Solo administradores
  */
-router.get('/bookings', verifyToken, getBookings);
+router.get('/bookings', verifyToken, isAdmin, getBookings);
 
 /**
  * @swagger
- * /api/bookings/{id}:
+ * /api/bookings/hotel/{hotelId}:
  *   get:
- *     summary: Obtener una reserva por ID
+ *     summary: Obtener reservas de un hotel específico (Solo Admin)
  *     tags: [Bookings]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: hotelId
  *         required: true
  *         schema:
  *           type: string
- *         description: ID de la reserva
+ *         description: ID del hotel
  *     responses:
  *       200:
- *         description: Detalles de la reserva
- *       404:
- *         description: Reserva no encontrada
+ *         description: Lista de reservas del hotel
+ *       401:
+ *         description: No autorizado
+ *       403:
+ *         description: Acceso denegado - Solo administradores
  */
-router.get('/bookings/:id', verifyToken, getBookingById);
+router.get('/bookings/hotel/:hotelId', verifyToken, isAdmin, getBookingById);
+
+/**
+ * @swagger
+ * /api/bookings/user:
+ *   get:
+ *     summary: Obtener las reservas del usuario autenticado
+ *     tags: [Bookings]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de reservas del usuario
+ *       401:
+ *         description: No autorizado
+ */
+router.get('/bookings/user', verifyToken, getAllUserBooking);
 
 /**
  * @swagger
