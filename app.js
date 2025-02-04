@@ -8,6 +8,7 @@ import httpErrorHandler from "./src/core/middlewares/errorHandler.js";
 import hotelsRouter from "./src/api/routes/hotels.js";
 import roomRoutes from "./src/api/routes/roomRoute.js";
 import userRoutes from './src/api/routes/userRoutes.js';
+import bookingRoutes from './src/api/routes/bookingRoutes.js';
 import displayRoutes from "express-routemap";
 import session from 'express-session';
 
@@ -45,6 +46,7 @@ const apiRouter = express.Router();
 apiRouter.use('/users', userRoutes);
 apiRouter.use('/hotel', roomRoutes);
 apiRouter.use('/hotels', hotelsRouter);
+apiRouter.use('/bookings', bookingRoutes);
 
 app.use(`/${API_PREFIX}`, apiRouter);
 

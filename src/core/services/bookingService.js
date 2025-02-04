@@ -1,12 +1,30 @@
-import { getAll, create, getById, update, findAndDelete, isIdExisting} from "../../data/repositories/bookingRepository";
+import { getAll, create, getById, update, findAndDelete, isIdExisting} from "../../data/repositories/bookingRepository.js";
+import Room from "../models/roomModel.js";
+import Booking from "../models/bookingModel.js";
 
 export class BookingService {
 
   constructor(){}
 
-  async getUsersReservations() {
-    const data = await getAll();
-    return data;
+  // Obtener todas las reservas (Admin)
+  async getAllReservations() {
+    return await getAll();
+  }
+
+  // Obtener reservas de un hotel específico (Admin)
+  async getHotelReservations(hotelId) {
+    const bookings = await Booking.find({ hotelID: hotelId })
+      .populate('userID', 'firstName lastName email')
+      .populate('roomID', 'roomNumber roomType');
+    return bookings;
+  }
+
+  // Obtener reservas de un usuario específico
+  async getUserReservations(userId) {
+    const bookings = await Booking.find({ userID: userId })
+      .populate('hotelID', 'name location')
+      .populate('roomID', 'roomNumber roomType pricePerNight');
+    return bookings;
   }
 
   async getReservationById(id) {
@@ -18,7 +36,25 @@ export class BookingService {
   }
 
   async createReservation(reservationData) {
+    // Verificar disponibilidad de la habitación
+    const room = await Room.findById(reservationData.roomID);
+    if (!room || !room.available) {
+      throw new Error('La habitación no está disponible');
+    }
+
+    // Calcular el precio total
+    const startDate = new Date(reservationData.startReservationDate);
+    const endDate = new Date(reservationData.endReservationDate);
+    const nights = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+    
+    reservationData.totalPrice = nights * room.pricePerNight;
+
+    // Crear la reserva
     const reservation = await create(reservationData);
+
+    // Actualizar disponibilidad de la habitación
+    await Room.findByIdAndUpdate(reservationData.roomID, { available: false });
+
     return reservation;
   }
 
@@ -31,12 +67,15 @@ export class BookingService {
     return updatedReservation
   }
 
-  async cancelReservation(id) {
-    const reservationExist = await isIdExisting(id);
-    if (!reservationExist){
-      return null
+  async cancelReservation(bookingId, userId) {
+    const reservation = await getById(bookingId);
+    if (!reservation || reservation.userID.toString() !== userId) {
+      return null;
     }
-    const cancelledReservation = await findAndDelete(id);
-    return cancelledReservation
+
+    const cancelledReservation = await update(bookingId, { status: 'cancelled' });
+    await Room.findByIdAndUpdate(reservation.roomID, { available: true });
+
+    return cancelledReservation;
   }
 }
