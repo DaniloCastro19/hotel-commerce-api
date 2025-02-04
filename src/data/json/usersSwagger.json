@@ -1,9 +1,9 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Users API",
+        "title": "Hotel Booking API",
         "version": "1.0.0",
-        "description": "API for managing users"
+        "description": "API for hotel booking system"
     },
     "paths": {
         "/api/users": {
@@ -128,6 +128,15 @@
                     }
                 }
             }
+        },
+        "/api/bookings": {
+            // ... booking routes ...
+        },
+        "/api/hotels": {
+            // ... hotel routes ...
+        },
+        "/api/rooms": {
+            // ... room routes ...
         }
     },
     "components": {
@@ -190,5 +199,10 @@
                 "bearerFormat": "JWT"
             }
         }
-    }
+    },
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ]
 }
