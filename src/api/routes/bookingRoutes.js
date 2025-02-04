@@ -50,7 +50,7 @@ const router = express.Router();
  *       401:
  *         description: No autorizado
  */
-router.post('/bookings', verifyToken, createBooking);
+router.post('/', verifyToken, createBooking);
 
 /**
  * @swagger
@@ -68,7 +68,7 @@ router.post('/bookings', verifyToken, createBooking);
  *       403:
  *         description: Acceso denegado - Solo administradores
  */
-router.get('/bookings', verifyToken, isAdmin, getBookings);
+router.get('/', verifyToken, isAdmin, getBookings);
 
 /**
  * @swagger
@@ -93,7 +93,7 @@ router.get('/bookings', verifyToken, isAdmin, getBookings);
  *       403:
  *         description: Acceso denegado - Solo administradores
  */
-router.get('/bookings/hotel/:hotelId', verifyToken, isAdmin, getBookingById);
+router.get('/hotel/:hotelId', verifyToken, isAdmin, getBookingById);
 
 /**
  * @swagger
@@ -109,7 +109,7 @@ router.get('/bookings/hotel/:hotelId', verifyToken, isAdmin, getBookingById);
  *       401:
  *         description: No autorizado
  */
-router.get('/bookings/user', verifyToken, getAllUserBooking);
+router.get('/user', verifyToken, getAllUserBooking);
 
 /**
  * @swagger
@@ -132,6 +132,6 @@ router.get('/bookings/user', verifyToken, getAllUserBooking);
  *       404:
  *         description: Reserva no encontrada
  */
-router.delete('/bookings/:id', verifyToken, cancelBooking);
+router.delete('/:id', verifyToken, cancelBooking);
 
 export default router;
