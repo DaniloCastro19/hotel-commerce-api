@@ -6,12 +6,10 @@ export class BookingService {
 
   constructor(){}
 
-  // Obtener todas las reservas (Admin)
   async getAllReservations() {
     return await getAll();
   }
 
-  // Obtener reservas de un hotel específico (Admin)
   async getHotelReservations(hotelId) {
     const bookings = await Booking.find({ hotelID: hotelId })
       .populate('userID', 'firstName lastName email')
@@ -19,7 +17,6 @@ export class BookingService {
     return bookings;
   }
 
-  // Obtener reservas de un usuario específico
   async getUserReservations(userId) {
     const bookings = await Booking.find({ userID: userId })
       .populate('hotelID', 'name location')
@@ -36,23 +33,19 @@ export class BookingService {
   }
 
   async createReservation(reservationData) {
-    // Verificar disponibilidad de la habitación
     const room = await Room.findById(reservationData.roomID);
     if (!room || !room.available) {
       throw new Error('La habitación no está disponible');
     }
 
-    // Calcular el precio total
     const startDate = new Date(reservationData.startReservationDate);
     const endDate = new Date(reservationData.endReservationDate);
     const nights = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
     
     reservationData.totalPrice = nights * room.pricePerNight;
 
-    // Crear la reserva
     const reservation = await create(reservationData);
 
-    // Actualizar disponibilidad de la habitación
     await Room.findByIdAndUpdate(reservationData.roomID, { available: false });
 
     return reservation;
@@ -68,13 +61,31 @@ export class BookingService {
   }
 
   async cancelReservation(bookingId, userId) {
-    const reservation = await getById(bookingId);
-    if (!reservation || reservation.userID.toString() !== userId) {
-      return null;
+    const reservation = await Booking.findById(bookingId)
+        .populate('userID', '_id');
+    
+    if (!reservation) {
+        throw new Error('Reservation not found');
     }
 
-    const cancelledReservation = await update(bookingId, { status: 'cancelled' });
-    await Room.findByIdAndUpdate(reservation.roomID, { available: true });
+    console.log('Reservation userID:', reservation.userID._id.toString());
+    console.log('Request userId:', userId);
+
+    const isOwner = reservation.userID._id.toString() === userId.toString();
+    
+    if (!isOwner) {
+        throw new Error('Unauthorized to cancel this reservation');
+    }
+
+    const cancelledReservation = await Booking.findByIdAndUpdate(
+        bookingId,
+        { status: 'cancelled' },
+        { new: true }
+    );
+
+    if (cancelledReservation) {
+        await Room.findByIdAndUpdate(reservation.roomID, { available: true });
+    }
 
     return cancelledReservation;
   }
