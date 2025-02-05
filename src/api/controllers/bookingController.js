@@ -6,7 +6,7 @@ export const createBooking = async (req, res) => {
     try {
         const bookingData = {
             ...req.body,
-            userID: req.user.id // Obtener el ID del usuario del token
+            userID: req.user.id 
         };
         const booking = await bookingService.createReservation(bookingData);
         res.status(201).json(booking);
@@ -15,10 +15,6 @@ export const createBooking = async (req, res) => {
     }
 };
 
-/**
- * get all -- para toda la pagina
- * admin para historial
- */
 export const getBookings = async (req, res) => {
     try {
         const bookings = await bookingService.getAllReservations();
@@ -28,10 +24,6 @@ export const getBookings = async (req, res) => {
     }
 };
 
-/**
- * user -- persona sus datos tengo solo sus datos
- * admin
- */
 export const getBookingById = async (req, res) => {
     try {
         const hotelId = req.params.hotelId;
@@ -42,13 +34,9 @@ export const getBookingById = async (req, res) => {
     }
 };
 
-/**
- * user -- persona sus datos tengo solo sus datos
- * users y sus reservas
- */
 export const getAllUserBooking = async (req, res) => {
     try {
-        const userId = req.user.id; // Obtener el ID del usuario del token
+        const userId = req.user.id; 
         const bookings = await bookingService.getUserReservations(userId);
         res.status(200).json(bookings);
     } catch (error) {
@@ -60,12 +48,21 @@ export const cancelBooking = async (req, res) => {
     try {
         const userId = req.user.id;
         const bookingId = req.params.id;
+        
+        console.log('Token user ID:', userId);
+        console.log('Booking ID:', bookingId);
+        
         const booking = await bookingService.cancelReservation(bookingId, userId);
-        if (!booking) {
-            return res.status(404).json({ message: 'Reserva no encontrada' });
-        }
-        res.status(200).json({ message: 'Reserva cancelada exitosamente' });
+        res.status(200).json({ 
+            message: 'Reserva cancelada exitosamente',
+            booking 
+        });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error al cancelar reserva:', error);
+        const statusCode = 
+            error.message === 'Reservation not found' ? 404 :
+            error.message === 'Unauthorized to cancel this reservation' ? 403 : 500;
+            
+        res.status(statusCode).json({ message: error.message });
     }
 };
