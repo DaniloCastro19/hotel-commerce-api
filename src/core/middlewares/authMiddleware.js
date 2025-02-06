@@ -21,7 +21,6 @@ export const verifyToken = async (req, res, next) => {
             return res.status(401).json({ message: 'User not found' });
         }
 
-        // Add full user info to request
         req.user = {
             id: user._id,
             email: user.email,

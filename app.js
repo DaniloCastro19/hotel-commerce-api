@@ -3,9 +3,9 @@ import cors from "cors"
 import * as dotenv from "dotenv"
 import swaggerUi from 'swagger-ui-express';
 import dbClient from "./src/data/dbClient.js";
-import { swaggerSpec } from './src/config/swagger.js';
+import { swaggerSpec } from './swagger.js';
 import httpErrorHandler from "./src/core/middlewares/errorHandler.js";
-import hotelsRouter from "./src/api/routes/hotels.js";
+import hotelsRouter from "./src/api/routes/hotelsRoutes.js";
 import roomRoutes from "./src/api/routes/roomRoute.js";
 import userRoutes from './src/api/routes/userRoutes.js';
 import bookingRoutes from './src/api/routes/bookingRoutes.js';
