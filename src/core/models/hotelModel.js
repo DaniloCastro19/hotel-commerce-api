@@ -36,6 +36,7 @@ const hotelModel = new mongoose.Schema(
             require: true
         },
 
+
     }, {timestamps:false}
 );
 

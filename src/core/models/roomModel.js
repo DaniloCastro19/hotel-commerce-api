@@ -7,10 +7,7 @@ const roomModel = new mongoose.Schema(
             type: String,
             require: true
         },
-        roomNumber:{
-            type: Number,
-            require: true
-        },
+
         roomType:{
             type: String,
             require: true
@@ -19,14 +16,7 @@ const roomModel = new mongoose.Schema(
             type: Number,
             require: true
         },
-        capacity: {
-            type: Number,
-            require: true
-        },
-        available: {
-            type: Boolean,
-            require: true
-        },
+
         pricePerNight: {
             type: Number,
             require: true

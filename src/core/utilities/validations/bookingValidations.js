@@ -3,6 +3,6 @@ import { validateResult } from "../../middlewares/resultValidator.js";
 
 
 export const validateHotelRoomsAvailability = [
-    
+    custom
 
 ]
