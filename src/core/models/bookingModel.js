@@ -22,11 +22,10 @@ const bookingModel = new mongoose.Schema(
             ref: 'hotels',
             required: true
         },
-        // roomID:{
-        //     type: ObjectId,
-        //     ref: 'rooms',
-        //     required: true
-        // },
+        roomsToReserve:{
+            type: Object,
+            required: true
+        },
         totalPrice: {
             type: Number,
             required: true

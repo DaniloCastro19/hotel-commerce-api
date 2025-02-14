@@ -1,7 +1,7 @@
 import express from 'express';
 import { createBooking, getBookings, getBookingById, cancelBooking, getAllUserBooking } from '../controllers/bookingController.js';
 import { verifyToken, isAdmin } from '../../core/middlewares/authMiddleware.js';
-
+import {validateHotelRoomsAvailability} from "../../core/utilities/validations/bookingValidations.js"
 const router = express.Router();
 
 /**
@@ -47,7 +47,7 @@ const router = express.Router();
  *       401:
  *         description: No autorizado
  */
-router.post('/', verifyToken, createBooking);
+router.post('/', validateHotelRoomsAvailability,verifyToken, createBooking);
 
 /**
  * @swagger
