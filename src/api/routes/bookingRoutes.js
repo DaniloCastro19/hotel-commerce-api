@@ -21,9 +21,6 @@ const router = express.Router();
  *             required:
  *               - startReservationDate
  *               - endReservationDate
- *               - userID
- *               - hotelID
- *               - roomID
  *             properties:
  *               startReservationDate:
  *                 type: string

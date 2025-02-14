@@ -15,12 +15,13 @@ export const validateBody = [
     check("totalRooms").notEmpty().withMessage("totalRooms cannot be empty"),
     check("totalRooms").isInt().withMessage("totalRooms must be an Numeric"),
     
-    check("roomsAvailable").notEmpty().withMessage("roomsAvailable cannot be empty"),
-    check("roomsAvailable").isInt().withMessage("roomsAvailable must be an integer"),
     
     check("roomTypes").notEmpty().withMessage("roomTypes cannot be empty"),
     check("roomTypes").isArray().withMessage("roomTypes must be an array"),
 
+    check("promotions").notEmpty().withMessage("promotions cannot be empty"),
+    check("promotions").isArray().withMessage("promotions must be an array"),
+    
     check("averagePricePerNight").notEmpty().withMessage("averagePricePerNight cannot be empty"),
     check("averagePricePerNight").isFloat().withMessage("averagePricePerNight must be an array"),
 

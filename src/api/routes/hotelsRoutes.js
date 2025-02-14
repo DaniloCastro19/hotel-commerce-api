@@ -2,6 +2,9 @@ import { Router } from 'express';
 import { HotelsController } from '../controllers/hotelsController.js';
 import { validateBody } from '../../core/utilities/validations/hotelsValidations.js';
 import { verifyToken, isAdmin } from '../../core/middlewares/authMiddleware.js';
+import { filterExtraFields } from '../../core/middlewares/filterFileds.js';
+
+const allowedFields = ["name", 'location', 'rating', 'totalRooms', 'roomTypes', 'averagePricePerNight', 'promotions']
 
 const router = Router();
 
@@ -15,7 +18,6 @@ const router = Router();
  *         - name
  *         - location
  *         - totalRooms
- *         - roomsAvailable
  *         - roomTypes
  *       properties:
  *         id:
@@ -157,7 +159,7 @@ router.get('/:id', HotelsController.getHotelById);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/', verifyToken, isAdmin, validateBody, HotelsController.createHotel);
+router.post('/', verifyToken, isAdmin, filterExtraFields(allowedFields),validateBody, HotelsController.createHotel);
 
 /**
  * @swagger

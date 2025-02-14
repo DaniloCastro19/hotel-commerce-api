@@ -1,5 +1,7 @@
 import { getAll, create, getById, update, findAndDelete, isIdExisting} from "../../data/repositories/bookingRepository.js";
 import Room from "../models/roomModel.js";
+import Hotel from "../models/hotelModel.js";
+
 import Booking from "../models/bookingModel.js";
 
 export class BookingService {
@@ -34,6 +36,7 @@ export class BookingService {
 
   async createReservation(reservationData) {
     const room = await Room.findById(reservationData.roomID);
+    const hotel = await Hotel.findById(reservationData.hotelID)
     if (!room || !room.available) {
       throw new Error('La habitación no está disponible');
     }
