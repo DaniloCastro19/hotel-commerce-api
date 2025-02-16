@@ -1,7 +1,7 @@
 import express from 'express';
 import { createBooking, getBookings, getBookingById, cancelBooking, getAllUserBooking } from '../controllers/bookingController.js';
 import { verifyToken, isAdmin } from '../../core/middlewares/authMiddleware.js';
-
+// import {validateHotelRoomsAvailability} from "../../core/utilities/validations/bookingValidations.js"
 const router = express.Router();
 
 /**
@@ -21,9 +21,7 @@ const router = express.Router();
  *             required:
  *               - startReservationDate
  *               - endReservationDate
- *               - userID
- *               - hotelID
- *               - roomID
+ *               - roomsToReserve
  *             properties:
  *               startReservationDate:
  *                 type: string
@@ -39,9 +37,9 @@ const router = express.Router();
  *               hotelID:
  *                 type: string
  *                 description: ID del hotel
- *               roomID:
- *                 type: string
- *                 description: ID de la habitación
+ *               roomsToReserve:
+ *                 type: Object
+ *                 description: Rooms y n de rooms a reservar
  *     responses:
  *       201:
  *         description: Reserva creada exitosamente
@@ -50,7 +48,7 @@ const router = express.Router();
  *       401:
  *         description: No autorizado
  */
-router.post('/', verifyToken, createBooking);
+router.post('/hotel/:hotelId',verifyToken, createBooking);
 
 /**
  * @swagger
@@ -132,6 +130,6 @@ router.get('/user', verifyToken, getAllUserBooking);
  *       404:
  *         description: Reserva no encontrada
  */
-router.delete('/:id', verifyToken, cancelBooking);
+router.delete('/:bookingId', verifyToken, cancelBooking);
 
 export default router;
