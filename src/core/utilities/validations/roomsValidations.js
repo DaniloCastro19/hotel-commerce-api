@@ -22,7 +22,7 @@ export const validateBody = [
 ]
 
 export const validateRoomType = [
-    body('roomType').isIn(Constants.ROOM_TYPES).withMessage("Room types must be one of these: [Simple, Double, Triple, SuiteCouple, SuiteFamiliar]"),
+    body('roomType').isIn(Constants.ROOM_TYPES).withMessage("Room types must be one of these: [Single, Double, Triple, SuiteCouple, SuiteFamiliar]"),
 
     (req,res,next) => {
         

@@ -5,7 +5,7 @@ import { verifyToken, isAdmin } from '../../core/middlewares/authMiddleware.js';
 import { filterExtraFields } from "../../core/middlewares/filterFileds.js";
 const roomRoutes = Router();
 
-const validFields = ['roomNumber','roomType', 'nBeds','capacity','available','pricePerNight'];
+const validFields = ['roomType', 'nBeds','pricePerNight'];
 
 /**
  * @swagger
@@ -263,7 +263,7 @@ roomRoutes.post('/:hotelId/rooms', verifyToken, isAdmin, filterExtraFields(valid
  *               $ref: '#/components/schemas/Error'
  * 
  */
-roomRoutes.put('/:hotelId/rooms', verifyToken, isAdmin, filterExtraFields(validFields),validateBody, validateRoomType,updateRoom);
+roomRoutes.put('/:hotelId/:roomId', verifyToken, isAdmin, filterExtraFields(validFields),validateBody, validateRoomType,updateRoom);
 
 /**
  * @swagger
@@ -296,6 +296,6 @@ roomRoutes.put('/:hotelId/rooms', verifyToken, isAdmin, filterExtraFields(validF
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-roomRoutes.delete('/:hotelId/rooms', verifyToken, isAdmin, deleteRoom);
+roomRoutes.delete('/:hotelId/rooms/:roomId', verifyToken, isAdmin, deleteRoom);
 
 export default roomRoutes;

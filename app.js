@@ -52,7 +52,7 @@ app.use(`/${API_PREFIX}`, apiRouter);
 
 app.listen(PORT, () =>{
     displayRoutes(app);
-    console.log(`App listening on http://localhost:${PORT}/${API_PREFIX}` );
+    console.log(`App listening on http://localhost:${PORT}/${API_PREFIX}`);
 });
 
 process.on('SIGINT', async ()=>{

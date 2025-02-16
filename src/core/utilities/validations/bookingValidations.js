@@ -15,23 +15,23 @@ async function getHotelRoomTypes (hotelId){
 }
 
 
-export const validateHotelRoomsAvailability = [
-    check("roomsToReserve*").isInt().withMessage("Number of rooms to reserve must be an integer."),
-    check("roomsToReserve").custom(async (value, {req}) =>{
-        const hotelRoomTypes = await getHotelRoomTypes(req.params.hotelId);
-        const roomTypesEntry = Object.keys(value).map(type => type.toLowerCase())
-        console.log(hotelRoomTypes);
-        console.log(roomTypesEntry);
-        const isValidTypes = hotelRoomTypes.every(type => roomTypesEntry.include(type))
+// export const validateHotelRoomsAvailability = [
+//     check("roomsToReserve.*").isInt().withMessage("Number of rooms to reserve must be an integer."),
+//     check("roomsToReserve").custom(async (value, {req}) =>{
+//         const hotelRoomTypes = await getHotelRoomTypes(req.params.hotelId);
+//         const roomTypesEntry = Object.keys(value).map(type => type.toLowerCase())
+//         console.log(hotelRoomTypes);
+//         console.log(roomTypesEntry);
+//         const isValidTypes = hotelRoomTypes.every(type => roomTypesEntry.include(type));
 
-        if(!isValidTypes){
-            const error = new Error("Available rooms for this hotel are:" + hotelRoomTypes)
-            throw error
-        }
-    }),
-    (req,res,next) => {
-        validateResult(req,res,next)
-    }
+//         if(!isValidTypes){
+//             const error = new Error("Available rooms for this hotel are:" + hotelRoomTypes)
+//             throw error
+//         }
+//     }),
+//     (req,res,next) => {
+//         validateResult(req,res,next)
+//     }
 
 
-]
+// ]
