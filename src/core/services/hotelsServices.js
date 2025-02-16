@@ -18,7 +18,11 @@ export class HotelServices {
   }
 
   async createHotel(hotelData) {
-    const hotel = await create(hotelData);
+    const hotelToCreate = {
+      ...hotelData,
+      roomsAvailable:hotelData.totalRooms
+    }
+    const hotel = await create(hotelToCreate);
     return hotel;
   }
 

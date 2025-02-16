@@ -35,7 +35,7 @@ export const createRoom = async (req, res, next) =>{
 
 export const updateRoom = async (req, res, next) =>{   
     try{
-        const room = await roomService.updateRoom(req.params.id, req.body);
+        const room = await roomService.updateRoom(req.params.roomId, req.body);
         if (room == null){throw ENTITY_NOT_FOUND('Room')}
         return res.status(200).json(room);
     }catch(error){
@@ -45,7 +45,7 @@ export const updateRoom = async (req, res, next) =>{
  
 export const deleteRoom = async (req, res, next) =>{   
     try{
-        const room = await roomService.deleteRoom(req.params.id);
+        const room = await roomService.deleteRoom(req.params.roomId);
         if (room == null || room == undefined){throw ENTITY_NOT_FOUND('Room')}
         return res.status(200).json(room);
     }catch(error){

@@ -1,6 +1,9 @@
 import { getAll, create, getById, update, findAndDelete, isIdExisting} from "../../data/repositories/bookingRepository.js";
 import Room from "../models/roomModel.js";
+import Hotel from "../models/hotelModel.js";
+
 import Booking from "../models/bookingModel.js";
+
 
 export class BookingService {
 
@@ -33,20 +36,72 @@ export class BookingService {
   }
 
   async createReservation(reservationData) {
-    const room = await Room.findById(reservationData.roomID);
-    if (!room || !room.available) {
-      throw new Error('La habitación no está disponible');
+
+    
+    const nTotalBedsToReserve = Object.values(reservationData.roomsToReserve).reduce((prev,curr) => prev+curr);
+    const hotel = await Hotel.findById(reservationData.hotelID);
+    
+    if(!hotel){
+      throw new Error("Hotel doesn't exist");
     }
+    //Validate if Hotel have enought rooms
+    if(nTotalBedsToReserve > hotel.roomsAvailable){
+      throw new Error("Rooms available in hotel are currently not enought. Number of current Rooms availables: " + hotel.roomsAvailable);
+    }
+
+    // Obtain type of requested rooms
+    const requestedTypes = Object.keys(reservationData.roomsToReserve); 
+    
+
+    //Find these rooms on bd 
+    const rooms = await Room.find({
+      hotelId: reservationData.hotelID,
+      roomType: {$in: requestedTypes}
+    });
+
+    
+
+    // validate all type exists
+    const foundTypes = rooms.map(room => room.roomType);
+    const missingTypes = requestedTypes.filter(type => !foundTypes.includes(type))
+    if(missingTypes.length > 0){
+      throw new Error(`Types no availables: ${missingTypes.join(", ")}`);
+    }
+
+    // Create a map of price per type
+    const priceMap = {};
+    rooms.forEach(room => {
+      priceMap[room.roomType] = room.pricePerNight;
+    });
+
+    
+
+    // Validate positive quantities
+    for (const [type, quantity] of Object.entries(reservationData.roomsToReserve)) {
+      if (!Number.isInteger(quantity) || quantity <= 0) {
+        throw new Error(`Cantidad inválida para ${type}: ${quantity}`);
+      }
+    }
+    //Calculating Nights
 
     const startDate = new Date(reservationData.startReservationDate);
     const endDate = new Date(reservationData.endReservationDate);
-    const nights = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-    
-    reservationData.totalPrice = nights * room.pricePerNight;
+    const nights = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));  
+
+    //Calculate total
+    let total = 0;
+    for(const [type,quantity] of Object.entries(reservationData.roomsToReserve)){
+      total+=priceMap[type]*quantity*nights;
+    }
+
+    reservationData.totalPrice = total;
+
+    //Discount the available rooms from Hotel
+    hotel.roomsAvailable = hotel.roomsAvailable - nTotalBedsToReserve;
+    await hotel.save()
 
     const reservation = await create(reservationData);
 
-    await Room.findByIdAndUpdate(reservationData.roomID, { available: false });
 
     return reservation;
   }

@@ -6,8 +6,9 @@ export const createBooking = async (req, res) => {
     try {
         const bookingData = {
             ...req.body,
-            userID: req.user.id 
-        };
+            userID: req.user.id,
+            hotelID:req.params.hotelId
+        };        
         const booking = await bookingService.createReservation(bookingData);
         res.status(201).json(booking);
     } catch (error) {
