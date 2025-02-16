@@ -51,7 +51,6 @@ export class BookingService {
 
     // Obtain type of requested rooms
     const requestedTypes = Object.keys(reservationData.roomsToReserve); 
-    console.log(requestedTypes);
     
 
     //Find these rooms on bd 
@@ -60,7 +59,6 @@ export class BookingService {
       roomType: {$in: requestedTypes}
     });
 
-    console.log(rooms);
     
 
     // validate all type exists
@@ -76,7 +74,6 @@ export class BookingService {
       priceMap[room.roomType] = room.pricePerNight;
     });
 
-    console.log(priceMap);
     
 
     // Validate positive quantities
