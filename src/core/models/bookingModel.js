@@ -30,6 +30,10 @@ const bookingModel = new mongoose.Schema(
             type: Number,
             required: true
         },
+        reservationDetails:{
+            type: Object,
+            required: true
+        },
         status: {
             type: String,
             enum: ['pending', 'confirmed', 'cancelled'],

@@ -22,6 +22,7 @@ const router = express.Router();
  *               - startReservationDate
  *               - endReservationDate
  *               - roomsToReserve
+ *               - reservationDetails
  *             properties:
  *               startReservationDate:
  *                 type: string
@@ -40,6 +41,9 @@ const router = express.Router();
  *               roomsToReserve:
  *                 type: Object
  *                 description: Rooms y n de rooms a reservar
+ *               reservationDetails:
+ *                 type: Object
+ *                 description: Detalles de la reservación
  *     responses:
  *       201:
  *         description: Reserva creada exitosamente
