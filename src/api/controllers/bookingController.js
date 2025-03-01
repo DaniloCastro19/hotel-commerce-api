@@ -48,7 +48,7 @@ export const getAllUserBooking = async (req, res) => {
 export const cancelBooking = async (req, res) => {
     try {
         const userId = req.user.id;
-c
+        const bookingId = req.params.bookingId;
         
         console.log('Token user ID:', userId);
         console.log('Booking ID:', bookingId);
