@@ -23,7 +23,6 @@ export class BookingService {
   async getUserReservations(userId) {
     const bookings = await Booking.find({ userID: userId })
       .populate('hotelID', 'name location')
-      .populate('roomID', 'roomNumber roomType pricePerNight');
     return bookings;
   }
 
