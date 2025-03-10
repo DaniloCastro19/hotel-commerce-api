@@ -175,7 +175,7 @@ roomRoutes.get('/:hotelId/rooms/search', filterRooms);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-roomRoutes.get('/:hotelId/rooms/:id', getRoom);
+roomRoutes.get('/rooms/:id', getRoom);
 
 /**
  * @swagger
