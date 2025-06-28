@@ -6,7 +6,6 @@ An API service exercise for a hotel web application.
 
 ## Prerequisites
 * NodeJS (18.20 or higher) and npm. 
-* Docker.
 
 ## Instalation
 
